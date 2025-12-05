@@ -1,5 +1,9 @@
 
 
+NOTE:
+    - You can create mutliple apps in a project depends on usecase. just add every app's in settings.py > INSTALLED_APPS
+
+
 # models.get_object_or_404():
     from django.urls.conf import include
 - models.get_object_or_404(model, **kwargs)
@@ -20,7 +24,28 @@
 # context_processor:
     -  it's provide the global context of data which is fetch from the DB and we can use it in across all templates 
     - we need to create a file "context_processors.py" in the app. : it takes request as a parameter and return a dictionary of data.
-    - add this file in settings.py in TEMPLATES > 
+    - add this file's function in settings.py in TEMPLATES > with full-path.
 
 # Linking posts By Category Url:
     -  Urls path : "path('<int:category_id>/', views.category, name='category')," this name used in <a href="{% url 'blogs:category category_id %}">{{category.category_name}}</a>
+
+# Single Blog page:
+    - add new url in project urls.py : path('<slug:slug>/', BlogsViews.blog, name='blog'),
+    - create view logic in views.py : def blog(request, slug):
+        return render(request, 'blog.html')
+    - extend base.html in blog.html
+    - First change the "href" of continue reading to <a href="{% url 'blog' blog.slug %}">Continue Reading</a> : so thta it's hit the endpoint og our created URL and come in View logic. 
+    - best practice to get data from DB : is use "get_object_or_404" method
+    - made the "href","urls" and "views" logic for navigation.
+
+# 26 Assignments
+    - create Abputus and Social Links
+    - added new app called : assignments
+    - he create Model, make it migrate, register in admin, get in views and show in template    
+    - get data of Social Links from DB in context_processor for multiple template usecase.
+
+# 30 seachFilter:
+    - create a search bar and give GET method and get the keyword.
+    - now compare this key title using "titele__icontains=keyword". icontains is case-insensitive.
+    - to multiple filter use "Q"
+
