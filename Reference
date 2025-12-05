@@ -49,3 +49,29 @@ NOTE:
     - now compare this key title using "titele__icontains=keyword". icontains is case-insensitive.
     - to multiple filter use "Q"
 
+# 33 Registration:
+    - create url in project urls.py : path('register/', views.register, name='register'),
+    - create view in main_project views.py : def register(request):
+        return render(request, 'register.html')
+
+    #register : 
+    - django provide the default registration form : UserCreationForm "from django.contrib.auth.forms import User", "from django.contrib.auth.forms import UserCreationForm"
+    - create a class in saperate file which define the Model=User and specify th fields as well. then create object of this class in views.py and pass it to the template.[there while you form method is POST make sure to add csrf token in it]
+    #login:
+    - almost same as register and django also provide the inbuilt AuthenticationForm "from django.contrib.auth.forms import AuthenticationForm"
+
+# 37 Login and logout:
+    - if form.isvalid():
+        username = form.cleaned_data.get('username')
+        password = form.cleaned_data.get('password')
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.error(request, 'Invalid username or password.')
+    else:
+        messages.error(request, 'Invalid username or password.')
+
+    #logout : "from django.contrib.auth import logout",
+    - logout view : logout(request)
