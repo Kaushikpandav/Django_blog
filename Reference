@@ -1,0 +1,26 @@
+
+
+# models.get_object_or_404():
+    from django.urls.conf import include
+- models.get_object_or_404(model, **kwargs)
+    -  Go in setting and toggle False to DEBUG and [*] to ALLOWED_HOSTS
+
+# templates inheritence:
+    - base.html : write block content with code blocks for header, footer, sidebar etc... and just import in used-case based files !
+
+    - about.html : extends base.html , if want different main block define the code block as here as well
+
+    THis things specify the code scaliteness of the layout - block content
+                                                           - endblock
+
+# urls.py 
+    - make path('category/<slug:slug>/', views.category, name='category'),
+    - make path('category/', include('blogs.urls', namespace='blogs')), # this is the standard way of doing it, amd specify all things in urls.py
+
+# context_processor:
+    -  it's provide the global context of data which is fetch from the DB and we can use it in across all templates 
+    - we need to create a file "context_processors.py" in the app. : it takes request as a parameter and return a dictionary of data.
+    - add this file in settings.py in TEMPLATES > 
+
+# Linking posts By Category Url:
+    -  Urls path : "path('<int:category_id>/', views.category, name='category')," this name used in <a href="{% url 'blogs:category category_id %}">{{category.category_name}}</a>
