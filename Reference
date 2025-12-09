@@ -1,5 +1,6 @@
 
 
+from django.shortcuts import get_object_or_404
 import queue
 NOTE:
     - You can create mutliple apps in a project depends on usecase. just add every app's in settings.py > INSTALLED_APPS
@@ -166,7 +167,7 @@ NOTE:
         category = Category.objects.get(id=pk)
         category.delete()
         return redirect('delete_category', pk=pk)
-        
+
     - creae template : delete_category.html
     - create model : Category to delete : "from django import forms" :
         class CategoryForm(forms.ModelForm):
@@ -178,10 +179,89 @@ NOTE:
     - add csrf token : {% csrf_token %}
     - delete category in DB : 
 
+# 53 Blog Post section:
+    - create new url : path('blog', views.blog, name='add_blog'),
+
+    - create new view : def add_blog(request):
+        post = Blog.objects.all()
+        context = {'post': post}
+        return render(request, 'add_blog.html', context)
+    - create model : Blog to add : "from django import forms" :
+        class BlogForm(forms.ModelForm):
+            class Meta:
+                model = Blog
+                fields = ['title', 'content', 'category']
+        - create object of this class in views.py and pass it to the template.
+    - add form in template : <form method="post"> <input type="text" name="title"> <input type="text" name="content"> <input type="text" name="category"> <button type="submit">Add Blog</button> </form>
+    - add csrf token : {% csrf_token %}
+    - add blog in DB : 
+
+    # add blog:
+    # add slug:
+    - "from django.utils.text import slugify"
+
+    - create new url : path('blog/add/', views.add_blog, name='add_blog'),
+    - create new view : 
+    def add_blog(request):
+        if request.method == 'POST':
+            form = BlogForm(request.POST, request.FILES) # request.FILES for image
+            if form.is_valid():
+                post = form.save(commit=False) # for can't be blank value field
+                post.author = request.user # logged in user
+                post.save() # because i want id from the post
+                title = form.cleaned_data.get('title')
+                post.slug = slugify(title) + '-' + str(post.id)
+                post.save()
+                return redirect('add_blog')
+            else:
+                form = BlogForm()
+                return render(request, 'add_blog.html')
+
+
+    - create model : Blog to add : "from django import forms" :
+        - create object of this class in views.py and pass it to the template.
+    - add form in template : <form action="{% url 'add_blog' %}" method="post" enctype="multipart/form-data"> <input type="text" name="title"> <input type="text" name="content"> <input type="text" name="category"> <button type="submit">Add Blog</button> </form>
+    - created a new form : BlogForm
+    -  class BlogForm(forms.ModelForm):
+        class Meta:
+            model = Blog
+            fields = ['title', 'feature_image', 'short_description', 'status','is_featured','blog_body','category'] # or fields = '__all__'
+
+
+    # edit blog:
+    - create new url : path('blog/edit/<int:pk>/', views.edit_blog, name='edit_blog'),
+    - create new view : 
+    def edit_blog(request, pk):
+        post = get_object_or_404(Blog, id=pk)
+        if request.method =='POST':
+            form = BlogForm(request.POST, request.FILES, instance=post)
+            if form.is_valid():
+                form.save()
+                title = form.cleaned_data.get('title')
+                post.slug = slugify(title) + '-' + str(post.id)
+                post.save()
+                return redirect('posts', pk=pk)
+            else:
+                form = BlogForm(instance=post)
+                return render(request, 'edit_blog.html')
 
 
 
+        form = BlogForm(instance=post)
+        context = {
+            "form": form,
+            'post': post
+        }
 
+        return render(request, 'edit_blog.html', context)
+
+    # delete blog:
+    - create new url : path('blog/delete/<int:pk>/', views.delete_blog, name='delete_blog'),
+    - create new view : 
+    def delete_blog(request, pk):
+        post = get_object_or_404(Blog, id=pk)
+        post.delete()
+        return redirect('posts')
 
 
 
