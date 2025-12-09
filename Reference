@@ -77,6 +77,119 @@ NOTE:
     #logout : "from django.contrib.auth import logout",
     - logout view : logout(request)
 
+# 38 Authentication and Authorization:
+    - create a user right within admin panel (create user and it's permission),
+    - Groups : collection of permissions, user can be in multiple groups, group can have multiple permissions.
+        - EX: Group is collection of permissions and user can be in multiple groups and group can have multiple permissions.
+              - easily scalable and maintainable in [Role based authentication] RBAC
+
+# 41 Upgrade and packages:
+    - pip install --upgrade django
+    - pip freeze > requirements.txt (setup all version with ">=")
+    - pip install -r requirements.txt 
+
+# 43 Dashboard URL configuration:
+    -  create new dashboard app, and add it to settings.py
+    -  make urls, views, templates.
+
+# 44 Template:
+    -  create template with base.html and add blogs and category count.
+
+# 46 Login required decorater:
+    - user : login_required (decorator) : "from django.contrib.auth.decorators import login_required"
+    - EX : @login_required(login_url='login')
+            def dashboard(request):
+                return render(request, 'dashboard.html')
+
+# 47 category Section:
+    - Create CRUD for category in dashboard.
+    - made a dynamic Bg toggle using the {% if '/dashboard/' in request.path %} class="bg-dark" {% endif %} in div
+
+#48 category table:
+    - add table, fill data from DB and add icon.. 
+
+#49 Add category in dashboard:
+    - crate new url : path('category/add/', views.category, name='add_category'),
+    - crate new view : def add_category(request):
+        return render(request, 'add_category.html')
+    - creae template : add_category.html
+    - create model : Category to add : "from django import forms" :
+        class CategoryForm(forms.ModelForm):
+            class Meta:
+                model = Category
+                fields = ['category_name']
+        - create object of this class in views.py and pass it to the template.
+    - add form in template : <form method="post"> <input type="text" name="category_name"> <button type="submit">Add Category</button> </form>
+    - add csrf token : {% csrf_token %}
+    - add category in DB : 
+
+
+#50 handle POST request : 
+    - if request.method == 'POST':
+        form = CategoryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('add_category')
+        else:
+            form = CategoryForm()
+            return render(request, 'add_category.html', {'form': form})
+
+#51 Edit category in dashboard:
+    - crate new url : path('category/edit/<int:pk>/', views.category, name='edit_category'),
+    - crate new view : def edit_category(request, pk):
+        return render(request, 'edit_category.html')
+    - creae template : edit_category.html
+    - create model : Category to edit : "from django import forms" :
+        class CategoryForm(forms.ModelForm):
+            class Meta:
+                model = Category
+                fields = ['category_name']
+        - create object of this class in views.py and pass it to the template.
+    - add form in template : <form method="post"> <input type="text" name="category_name"> <button type="submit">Add Category</button> </form>
+    - add csrf token : {% csrf_token %}
+    - edit category in DB : 
+    - def edit_category(request, pk):
+        category = Category.objects.get(id=pk)
+        if request.method == 'POST':
+            form = CategoryForm(request.POST, instance=category)
+            if form.is_valid():
+                form.save()
+                return redirect('edit_category', pk=pk)
+            else:
+                form = CategoryForm(instance=category)
+                return render(request, 'edit_category.html', {'form': form})
+
+
+# 52 delete category in dashboard:
+    - crate new url : path('category/delete/<int:pk>/', views.category, name='delete_category'),
+    - crate new view : def delete_category(request, pk):
+        category = Category.objects.get(id=pk)
+        category.delete()
+        return redirect('delete_category', pk=pk)
+        
+    - creae template : delete_category.html
+    - create model : Category to delete : "from django import forms" :
+        class CategoryForm(forms.ModelForm):
+            class Meta:
+                model = Category
+                fields = ['category_name']
+        - create object of this class in views.py and pass it to the template.
+    - add form in template : <form method="post"> <input type="text" name="category_name"> <button type="submit">Add Category</button> </form>
+    - add csrf token : {% csrf_token %}
+    - delete category in DB : 
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -135,3 +248,8 @@ NOTE:
     16) Domain : nginix , gunicorn
     17) websockets
     18) elastic Search
+
+
+    ==========================================================
+
+    
