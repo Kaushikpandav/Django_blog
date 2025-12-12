@@ -263,6 +263,68 @@ NOTE:
         post.delete()
         return redirect('posts')
 
+# 61 manager_dashboard:
+
+    create User model, urls, views, templates.
+    - add user model : "from django.contrib.auth.models import User". from django.contrib.auth.forms import UserCreationForm
+    -  class UserForm(UserCreationForm):
+        class Meta:
+            model = User
+            fields = ['username', 'email', 'password1', 'password2']
+    - create object of this class in views.py and pass it to the template.
+    - add form in template : <form method="post"> <input type="text" name="username"> <input type="text" name="email"> <input type="text" name="password1"> <input type="text" name="password2"> <button type="submit">Add User</button> </form>
+    - add csrf token : {% csrf_token %}
+    - add user in DB : 
+    -  def add_user(request):
+        if request.method == 'POST':
+            form = UserForm(request.POST)
+            if form.is_valid():
+                form.save()
+                return redirect('login')
+            else:
+                form = UserForm()
+                return render(request, 'add_user.html', {'form': form})
+        else:
+            form = UserForm()
+            return render(request, 'registadd_userer.html', {'form': form})
+    #  how to handle non authorised persion access path of API : 
+
+    1) just to hide content  : {% if perms.auth.view_user %}
+    - create a file in app : middleware.py
+    - create a class in middleware.py
+    - add this class in settings.py > MIDDLEWARE
+
+    # - edit user : 
+    - create new url : path('user/edit/<int:pk>/', views.edit_user, name='edit_user'),
+    - model : 
+      class edituser(forms.ModelForm):
+        class Meta:
+            model = User
+            fields = ['username', 'email', 'password1', 'password2']
+
+    - create new view : 
+    def edit_user(request, pk):
+        user = get_object_or_404(User, id=pk)
+        if request.method == 'POST':
+            form = edituser(request.POST, instance=user)
+            if form.is_valid():
+                form.save()
+                return redirect('login')
+            else:
+                form = edituser(instance=user)
+                return render(request, 'update_user.html', {'form': form})
+        else:
+            form = edituser(instance=user)
+            return render(request, 'update_user.html', {'form': form})
+
+    # - delete user : 
+    - create new url : path('user/delete/<int:pk>/', views.delete_user, name='delete_user'),
+    - create new view : 
+    def delete_user(request, pk):
+        user = get_object_or_404(User, id=pk)
+        user.delete()
+        return redirect('login')
+
 
 
 
