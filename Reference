@@ -1,5 +1,7 @@
 
 
+from django.http.response import HttpResponseRedirect
+from django.http.response import HttpResponse
 from django.shortcuts import get_object_or_404
 import queue
 NOTE:
@@ -326,20 +328,91 @@ NOTE:
         return redirect('login')
 
 
+# 70 create comment model : 
+
+   - create new model :
+     class createComment(models.Model):
+        user = models.ForeignKey(User, on_delete=models.CASCADE)
+        blog = models.ForeignKey(Blog, on_delete=models.CASCADE)
+        comment = models.TextField()
+        created_at = models.DateTimeField(auto_now_add=True)
+        updated_at = models.DateTimeField(auto_now=True)
+        
+        class Meta:
+            verbose_name = 'Comment'
+            verbose_name_plural = 'Comments'
+        
+        def __str__(self):
+            return self.comment
+
+    - display comment in template : 
+    {% for comment in post.comment_set.all %}
+    {{ comment.comment }}
+    {% endfor %}
+
+    - create new view : 
+    def add_comment(request, pk):
+        post = get_object_or_404(Blog, id=pk)
+        if request.method == 'POST':
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.blog = post
+                comment.save()
+                return redirect('posts', pk=post.id)
+            else:
+                form = CommentForm()
+                return render(request, 'add_comment.html', {'form': form})
+        else:
+            form = CommentForm()
+            return render(request, 'add_comment.html', {'form': form})
+
+    # - display in template : 
+    {% if comments %}
+    {% for comment in comments %}
+    {{ comment.comment }}
+    {{ comment.created_at }}
+    {{ comment.updated_at }}
+    {{ comment.user }}
+    {% endfor %}
+    {% endif %}
+
+    # Edit or add comment method
+     <form method="post"> {% csrf_token %} {{ form.as_p }} <button type="submit">Add Comment</button> </form>
+    
+    # in View
+    def blog(request, slug):
+        single_blog = get_object_or_404(Blog, slug=slug, status='published')
+        if request.method = "POST":
+            comment = comment()
+            comment.user = request.user
+            comment.blog = single_blog
+            comment.comment = request.POST.get('comment')
+            comment.save()
+            return HttpResponseRedirect(request.path_info)
+
+        comment = comment.object.filter(blog=single_blog)
 
 
+    # allow only authenticated user to write the comment
 
-
-
-
-
-
-
-
-
-
-
-
+    def add_comment(request, pk):
+        if not request.user.is_authenticated:
+            return redirect('login')
+        post = get_object_or_404(Blog, id=pk)
+        if request.method == 'POST':
+            form = CommentForm(request.POST)
+            if form.is_valid():
+                comment = form.save(commit=False)
+                comment.blog = post
+                comment.save()
+                return redirect('posts', pk=post.id)
+            else:
+                form = CommentForm()
+                return render(request, 'add_comment.html', {'form': form})
+        else:
+            form = CommentForm()
+            return render(request, 'add_comment.html', {'form': form})
 
     ==========================================================
 
