@@ -1,0 +1,58 @@
+
+Model manager : it's interface between database query and model.
+
+
+class Student(models.Model):
+    name = models.CharField(max_length=100)
+    age = models.IntegerField()
+    roll = models.IntegerField()
+    
+
+class stdandard(models.Model):
+    name = models.ForeignKey(Student, on_delete=models.CASCADE)
+    age = models.IntegerField()
+    roll = models.IntegerField()
+
+obj = models.Manager()
+
+# You can also give multiple different name 
+obj2 = models.Manager()
+obj3 = models.Manager()
+
+#Now in views.py  i get hit query with this: 
+Student.obj.all()
+Standard.obj2.all()
+
+==========================
+
+
+# IF i want to create custom manager:
+
+from django.db import models
+
+class CustomManager(models.Manager):
+    def get_queryset(self): 
+        return super().get_queryset().order_by('name')
+
+class CustomManagerRollrange(models.Manager):
+    def return_roll_range(self, r1, r2): 
+        return super().get_queryset().filter(roll__range=(r1, r2))
+
+
+# now in model.py
+from  x.yz import CustomManager
+
+class Student(models.Model):
+    name = models.CharField(max_length=100)
+    age = models.IntegerField()
+    roll = models.IntegerField()
+    new_obj  = CustomManager()
+
+class stdandard(models.Model):
+    name = models.ForeignKey(Student, on_delete=models.CASCADE)
+    age = models.IntegerField()
+    roll = models.IntegerField()
+    roll_manager = CustomManagerRollrange()
+# On views.py:
+Student.new_obj.all() # it show data based order_by
+Student.roll_manager.return_roll_range(1, 10)

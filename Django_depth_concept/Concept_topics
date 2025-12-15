@@ -1,0 +1,14 @@
+
+signals
+middleware
+ORM : anotations
+optimizaed query : prefix..
+model manager
+custome models
+celary
+serializers
+sessions
+class based views
+
+
+# a middleware which contain a key with kaushik name if it not there then give exception
