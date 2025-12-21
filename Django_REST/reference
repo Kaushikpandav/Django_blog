@@ -1,0 +1,46 @@
+
+
+
+
+
+=================
+
+DRF : Django Rest Framework
+
+=================
+
+
+REST : represent state transfer
+
+- GET : read data
+- POST : create data
+- PUT : update data
+- PATCH : partial update data
+- DELETE : delete data
+- OPTIONS : describe the communication options for the target resource
+
+
+- HEAD : same as GET but without response body
+- TRACE : perform a message loop-back test along the path to the target resource
+- CONNECT : establish a tunnel to the server identified by the target resource
+- WebDAV : extension of HTTP/1.1 for collaborative authoring on the web
+- CRUD : create, read, update, delete
+- Idempotent : an operation that can be applied multiple times without changing the result beyond the initial application
+- Stateless : each request from client to server must contain all the information needed to understand and process the request
+- HATEOAS : Hypermedia As The Engine Of Application State
+- API : Application Programming Interface
+- SDK : Software Development Kit
+- WSGI : Web Server Gateway Interface
+- ASGI : Asynchronous Server Gateway Interface
+- JSON : JavaScript Object Notation
+- XML : eXtensible Markup Language
+- YAML : YAML Ain't Markup Language
+- OAuth : Open Authorization
+- JWT : JSON Web Token
+- CORS : Cross-Origin Resource Sharing
+- API Gateway : a server that acts as an API front-end, receiving API requests, enforcing
+
+
+=======================
+
+
