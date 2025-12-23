@@ -4,7 +4,7 @@ from django.db import models
 
 
 class Employees(models.Model):
-    emp_id = models.IntegerField(primary_key=True)
+    emp_id = models.CharField(primary_key=True)
     emp_name = models.CharField(max_length=100)
     designation = models.CharField(max_length=100)
 

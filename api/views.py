@@ -13,6 +13,11 @@ from rest_framework import generics, mixins, viewsets
 from django.shortcuts import get_object_or_404
 from blogs.models import Blog, Comment
 from blogs.serializer import BlogSerializer, CommentSerializer
+from .paginations import CustomPagination
+from employees.filter import EmployeeFilter
+from rest_framework.filters import SearchFilter, OrderingFilter
+
+
 
 @api_view(['GET','POST'])
 def StudentViews(request):
@@ -186,19 +191,27 @@ def Studentdetailsview(request,pk):
 
 
 # viewsets.ModelViewSet
-# class EmployeeViewSet(viewsets.ModelViewSet):
-#     queryset = Employees.objects.all()
-#     serializer_class = EmployeeSerializer
-
+class EmployeeViewSet(viewsets.ModelViewSet):
+    queryset = Employees.objects.all()
+    serializer_class = EmployeeSerializer
+    pagination_class = CustomPagination
+    # filterset_fields = ['designation'] # case sensitive | default inbuilt
+    filterset_class = EmployeeFilter # custom class filter
 
 
 
 # blogs
-
-class BlogsView(generics.ListAPIView, generics.CreateAPIView):
+class BlogsView(generics.ListCreateAPIView):
     queryset = Blog.objects.all()
     serializer_class = BlogSerializer
     
+    # filter_backends = [SearchFilter] # caseInsensitive
+    # search_fields = ['blog_title', 'blog_body']
+
+    filter_backends = [SearchFilter, OrderingFilter] # caseInsensitive
+    search_fields = ['^blog_title'] #startwith filterOperation
+    ordering_fields = ['id', 'blog_title']
+
 class CommentsView(generics.ListAPIView, generics.CreateAPIView):
     queryset = Comment.objects.all()
     serializer_class = CommentSerializer

@@ -312,3 +312,88 @@ class EmployeeDetailsView(APIView):
     1) PageNumberPagination : it's a pagination class that provides a simple way to paginate a queryset. if pagination is 30 the it'll display the 30 record. 
 
     2) LimitOffsetPagination : there is 2 things limit and offset. limit is the number of records to display and offset is the number of records to skip.
+
+    - if offset is 10 and limit is 10 then it'll display the 10 record from 11 to 20.
+    - if offset is 0 and limit is 10 then it'll display the 10 record from 1 to 10.
+
+    # 3) CursorPagination : it's a pagination class that provides a way to paginate a queryset using cursor based pagination.
+
+
+
+    # Global Pagination | this will only for generics and viewsets
+    REST_FRAMEWORK = {
+        "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.PageNumberPagination",
+        "PAGE_SIZE": 2
+    }
+
+    # CUSTOM Pagination | 
+    from rest_framework.pagination import PageNumberPagination, LimitOffsetPagination
+    from rest_framework.response import Response
+
+    class CustomPagination(PageNumberPagination):
+        page_query_param = 'page-num'
+        page_size_query_param = 'page_size'
+        max_page_size = 1
+
+        def get_paginated_response(self, data):
+            return Response({
+                'next':self.get_next_link(),
+                'previous':self.get_previous_link(),
+                'count':self.page.paginator.count,
+                'total_pages':self.page.paginator.num_pages,
+                'page_size':self.page_size,
+                'results':data
+            })
+
+====================================================================================================================================
+
+
+# Filtering : it's a process of filtering a queryset based on a set of conditions.
+
+    1) Global Filtering : it's a process of filtering a queryset based on a set of conditions.
+    2) Local Filtering : it's a process of filtering a queryset based on a set of conditions. it can be target to generics and viewsets.
+
+
+    # Global Filtering
+    REST_FRAMEWORK = {
+        "DEFAULT_FILTER_BACKENDS": ["django_filters.rest_framework.DjangoFilterBackend"]
+    }
+
+    class EmployeeViewSet(viewsets.ModelViewSet):
+        queryset = Employees.objects.all()
+        serializer_class = EmployeeSerializer
+        pagination_class = CustomPagination
+        # filterset_fields = ['designation'] # case sensitive | default inbuilt
+        filterset_class = EmployeeFilter # custom class filter
+
+    # Local Filtering
+    class BlogsView(generics.ListAPIView, generics.CreateAPIView):
+        queryset = Blog.objects.all()
+        serializer_class = BlogSerializer
+        filter_backends = [DjangoFilterBackend]
+        filterset_fields = ['blog_title', 'blog_body']
+
+
+    class EmployeeFilter(django_filters.FilterSet):
+        designation = django_filters.CharFilter(field_name='designation' ,lookup_expr='iexact')
+        name = django_filters.CharFilter(field_name='emp_name' ,lookup_expr='icontains')
+        # emp_id = django_filters.RangeFilter(field_name='emp_id') #RangeFilterb will only work with Integer values and primarykey 
+        id_min = django_filters.CharFilter(method='filter_by_id', label='From ID')
+        id_max = django_filters.CharFilter(method='filter_by_id', label='To EMP_ID')
+
+        class Meta:
+            model = Employees
+            fields = ['designation', 'name', 'id_min', 'id_max']
+
+        def filter_by_id(self, queryset, value):
+            if value == 'id_min':
+                return queryset.filter(emp_id__gte=value)
+            elif value == 'id_max':
+                return queryset.filter(emp_id__lte=value)
+            else:
+                return queryset
+
+
+====================================================================================================================================
+
+# Still need to explore : Authentication and Authorization, Permission, Tokens ETC..

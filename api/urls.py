@@ -3,9 +3,10 @@ from . import views
 from rest_framework.routers import DefaultRouter
 
 
-# router  = DefaultRouter()
+router  = DefaultRouter()
 
-# router.register('employees', views.EmployeeViewSet, basename='employees') # basedname only when used viewset.Viewset. not need while it Modelviewsets | also not need to create a multi path for 'pk' or without 'pk' based operations
+router.register('employees', views.EmployeeViewSet, basename='employees') # basedname only when used viewset.Viewset. not need while it Modelviewsets | also not need to create a multi path for 'pk' or without 'pk' based operations
+
 urlpatterns = [
 
     #students
@@ -17,7 +18,7 @@ urlpatterns = [
     # path('employees/<int:pk>/', views.EmployeeDetailsView.as_view())
 
     #viewset
-    # path('', include(router.urls))
+    path('', include(router.urls)),
 
     #blogs
     path('blogs/', views.BlogsView.as_view()),
