@@ -1,0 +1,35 @@
+
+
+
+
+Throttling :  rate limit to API 
+
+
+=========================================
+
+Default  = DEFAULT_THROTTLE_CLASSES & DEFAULT_THROTTLE_RATES are global
+
+ex:  
+
+REST_FRAMEWORK = {
+    'DEFAULT_THROTTLE_CLASSES':[
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ],
+    'DEFAULT_THROTTLE_RATES':{
+        'anon': '5/minute',
+        'user': '10/minute'
+    }
+}
+
+
+AnonRateThrottle : it's a way to limit the number of requests per minute for unauthenticated users. (unknown user)
+
+UserRateThrottle : it's a way to limit the number of requests per minute for authenticated users. (registered user)
+
+ScopedRateThrottle : it's a way to limit the number of requests per minute for a specific scope. (deepSearch)
+
+
+=========================================
+
+- create new project : django-admin startproject th
