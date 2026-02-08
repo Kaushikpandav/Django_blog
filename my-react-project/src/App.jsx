@@ -18,6 +18,8 @@ import CustomHooks from "./components/custom_Hooks/CustomHooks"
 import ConditionalRendering from "./components/ConditionalRendering"
 import Map from "./components/Map"
 import Inlinecss from "./components/Inlinecss"
+import Loadimages from "./components/loadimages"
+import Forms from "./components/Forms"
 
 function App() {
   let stock = 100
@@ -60,7 +62,9 @@ function App() {
       {/* <CustomHooks /> */}
       {/* <ConditionalRendering /> */}
       {/* <Map /> */}
-      <Inlinecss />
+      {/* <Inlinecss /> */}
+      {/* <Loadimages />0 */}
+      <Forms />
     </>
   )
 }
