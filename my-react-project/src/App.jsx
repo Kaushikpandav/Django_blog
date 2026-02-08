@@ -13,6 +13,7 @@ import CounterApp from "./components/Hooks/CounterAppUseState"
 import UseEffect from "./components/Hooks/UseEffect"
 import UseMemo from "./components/Hooks/UseMemo"
 import Child1 from "./components/Hooks/Child1"
+import Useref from "./components/Hooks/Useref"
 // import Child2 from "./components/Hooks/Child2"
 // import Child3 from "./components/Hooks/Child3"
 
@@ -50,6 +51,10 @@ function App() {
           <Child1 />
         </userContext.Provider>
       </stockContext.Provider>
+
+
+      {/* #Useref */}
+      <Useref />
     </>
   )
 }

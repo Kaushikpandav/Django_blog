@@ -1,9 +1,33 @@
-import React from 'react'
+import { useState , useRef } from 'react'
+
 
 const Useref = () => {
+    const [name, setName] =useState("")
+    const inputRef = useRef('')
+
+    //  use useref to stay-focus
+    const cleartext = () => {
+        setName("")
+        inputRef.current.focus()
+    }
+
+    //  store the previous value of a state or props
+    const prevName = useRef('')
+    const handleinput = (e) => {
+        prevName.current = name
+        setName(e.target.value)
+    }
+    
   return (
     <>
       <h1>UseRef</h1>
+      <p>Name: {name}</p>
+      <input ref={inputRef} type="text" value={name} onChange={handleinput}/>  
+
+      <button onClick={cleartext}>Clear</button>
+
+      <br />
+        <p>Previous Name: {prevName.current}</p>
     </>
   )
 }
