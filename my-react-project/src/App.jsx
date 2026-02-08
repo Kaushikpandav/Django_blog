@@ -1,19 +1,21 @@
+import React, { useState, createContext } from "react"
+
+export const stockContext = createContext()
+export const userContext = createContext()
+
 import Hello from "./components/hello"
 import Learn from "./components/learn"
 import Props from "./components/props"
 import Events from "./components/Events"
 import Lifting_state from "./components/lifting_state"
 import Hooks from "./components/hooks"
-import CounterApp from "./components/Hooks/CounterApp"
+import CounterApp from "./components/Hooks/CounterAppUseState"
 import UseEffect from "./components/Hooks/UseEffect"
 import UseMemo from "./components/Hooks/UseMemo"
-import Child1 from "./components/Hooks/child1"
-import Child2 from "./components/Hooks/child2"
-import Child3 from "./components/Hooks/child3"
-import { createContext } from "react"
+import Child1 from "./components/Hooks/Child1"
+// import Child2 from "./components/Hooks/Child2"
+// import Child3 from "./components/Hooks/Child3"
 
-const stockContext = createContext()
-const userContext = createContext()
 
 function App() {
   let stock = 100
@@ -24,10 +26,9 @@ function App() {
 
   // Cretae , provider and cosumer
 
-  const [user, setUser] =  React.useState({name: "AIML", Islogin: "yes"})
+  const [user, setUser] = useState({ name: "AIML", Islogin: "yes" })
 
-      
-  return (  
+  return (
     <>
       {/* <Hello />
       <Learn />
@@ -44,14 +45,13 @@ function App() {
       {/* <Child1 stock={stock}/> */}
 
       {/* Context APi Example */}
-      <stockContext.Provider value={{stock, price}}>
-        <userContext.Provider value={{user, setUser}}>
-         <Child1 />
+      <stockContext.Provider value={{ stock, price }}>
+        <userContext.Provider value={{ user, setUser }}>
+          <Child1 />
         </userContext.Provider>
       </stockContext.Provider>
     </>
-  ) 
+  )
 }
 
 export default App
-export {stockContext, userContext}
