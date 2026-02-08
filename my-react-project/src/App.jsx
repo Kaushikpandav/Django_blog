@@ -17,6 +17,7 @@ import Useref from "./components/Hooks/Useref"
 import CustomHooks from "./components/custom_Hooks/CustomHooks"
 import ConditionalRendering from "./components/ConditionalRendering"
 import Map from "./components/Map"
+import Inlinecss from "./components/Inlinecss"
 
 function App() {
   let stock = 100
@@ -58,7 +59,8 @@ function App() {
       {/* <Useref /> */}
       {/* <CustomHooks /> */}
       {/* <ConditionalRendering /> */}
-      <Map />
+      {/* <Map /> */}
+      <Inlinecss />
     </>
   )
 }
