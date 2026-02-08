@@ -15,6 +15,7 @@ import UseMemo from "./components/Hooks/UseMemo"
 import Child1 from "./components/Hooks/Child1"
 import Useref from "./components/Hooks/Useref"
 import CustomHooks from "./components/custom_Hooks/CustomHooks"
+import ConditionalRendering from "./components/ConditionalRendering"
 
 
 function App() {
@@ -28,7 +29,7 @@ function App() {
   }
 
   // Cretae , provider and cosumer
-  
+
   return (
     <>
       {/* <Hello />
@@ -55,7 +56,8 @@ function App() {
 
       {/* #Useref */}
       {/* <Useref /> */}
-      <CustomHooks />
+      {/* <CustomHooks /> */}
+      <ConditionalRendering />
     </>
   )
 }
