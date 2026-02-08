@@ -14,21 +14,21 @@ import UseEffect from "./components/Hooks/UseEffect"
 import UseMemo from "./components/Hooks/UseMemo"
 import Child1 from "./components/Hooks/Child1"
 import Useref from "./components/Hooks/Useref"
-// import Child2 from "./components/Hooks/Child2"
-// import Child3 from "./components/Hooks/Child3"
+import CustomHooks from "./components/custom_Hooks/CustomHooks"
 
 
 function App() {
   let stock = 100
   let price = 9999
+
+  const [user, setUser] = useState({ name: "AIML", Islogin: "yes" })
+
   const getStock = () => {
     return stock
   }
 
   // Cretae , provider and cosumer
-
-  const [user, setUser] = useState({ name: "AIML", Islogin: "yes" })
-
+  
   return (
     <>
       {/* <Hello />
@@ -46,15 +46,16 @@ function App() {
       {/* <Child1 stock={stock}/> */}
 
       {/* Context APi Example */}
-      <stockContext.Provider value={{ stock, price }}>
+      {/* <stockContext.Provider value={{ stock, price }}>
         <userContext.Provider value={{ user, setUser }}>
           <Child1 />
         </userContext.Provider>
-      </stockContext.Provider>
+      </stockContext.Provider> */}
 
 
       {/* #Useref */}
-      <Useref />
+      {/* <Useref /> */}
+      <CustomHooks />
     </>
   )
 }
