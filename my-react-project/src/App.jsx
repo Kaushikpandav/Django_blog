@@ -16,7 +16,7 @@ import Child1 from "./components/Hooks/Child1"
 import Useref from "./components/Hooks/Useref"
 import CustomHooks from "./components/custom_Hooks/CustomHooks"
 import ConditionalRendering from "./components/ConditionalRendering"
-
+import Map from "./components/Map"
 
 function App() {
   let stock = 100
@@ -57,7 +57,8 @@ function App() {
       {/* #Useref */}
       {/* <Useref /> */}
       {/* <CustomHooks /> */}
-      <ConditionalRendering />
+      {/* <ConditionalRendering /> */}
+      <Map />
     </>
   )
 }
