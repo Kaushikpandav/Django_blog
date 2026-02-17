@@ -36,6 +36,42 @@
 
 - django-admin startproject name
 
+7. directery strcuture:
+
+- wagi : web server gateway interface
+- asgi : asyncronous server gateway interface
+- settinngs
+- urls
+
+8. promotiion
+9. run on port
+
+- python manage.py runserver, python manage.py runserver 7878
+
+10. editer setup
+11.
+
+- creatign apps,
+- introduce files and admin pannel
+-
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
