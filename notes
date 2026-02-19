@@ -81,6 +81,21 @@ urlpatten = [
     <li><a href = "{% url 'homepage' %}">Home</a></li>
 </ul>
 
+25. template inside templates using : include
+
+
+<!-- nav.html -->
+<ul>
+    <li><a href = "{% url 'homepage' %}">Home</a></li>
+    <li><a href = "{% url 'homepage' %}">about</a></li>
+    <li><a href = "{% url 'homepage' %}">connect</a></li>
+    <li><a href = "{% url 'homepage' %}">news</a></li>
+</ul>
+
+<!-- home.html -->
+
+{% include 'nav.html' with name = "go" only%}
+
 
 
 
