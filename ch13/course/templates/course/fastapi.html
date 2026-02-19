@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-{% load static%}
+{% load static %}
 <html>
   <head>
     <meta charset="utf-8">
@@ -7,12 +7,12 @@
     <title>FASTAPI</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="{% static 'course/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
   </head>
   <body>
     <h1>Learn FastAPI with Greeky Shows</h1>
     <p>Learn FastAPI with Greeky Shows</p>
-
+    <img src="{% static 'course/images/download.jpeg' %}" alt="FastAPI Logo" width="200" height="200">
     <p>Current Date and Time : {{ dt }}</p>
     <p>Current Date and Time : {{ dt | date}}</p>
     <p>Current Date and Time : {{ dt |date:"Y-m-d H:i:s" }}</p>
@@ -60,5 +60,6 @@
         {% endfor %}
       {% endif %}
     {% endfor %}
+  <script src="{% static "course/js/test" %}%}" async defer></script>
   </body>
 </html>
