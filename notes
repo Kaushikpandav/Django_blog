@@ -66,10 +66,20 @@
 17. depth dive in templates
 18. import style , js ,img
 19. inheritance or extends
-20.
+20. inheritence with static files
+21. boostrap
+22. tailwind
+23. how to add tailwind
+24. use tailwinf cli
+24. create hyperlinks using URL
 
+urlpatten = [
+  path('/home', home, name=homepage)
+]
 
-
+<ul>
+    <li><a href = "{% url 'homepage' %}">Home</a></li>
+</ul>
 
 
 
