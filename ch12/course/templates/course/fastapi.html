@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>FASTAPI</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+  </head>
+  <body>
+    <h1>Learn FastAPI with Greeky Shows</h1>
+    <p>Learn FastAPI with Greeky Shows</p>
+
+    <p>Current Date and Time : {{ dt }}</p>
+    <p>Current Date and Time : {{ dt | date}}</p>
+    <p>Current Date and Time : {{ dt |date:"Y-m-d H:i:s" }}</p>
+    <p>Current Date and Time : {{ dt |date:'D d M Y'}}</p>
+    <p>Current Date and Time : {{ dt |time:'H:i'}}</p>
+    <p>Current Date and Time : {{ dt |date:'SHORT_DATE_FORMAT'}}</p>
+    <p>Current Date and Time : {{ dt |time:'SHORT_TIME_FORMAT'}}</p>
+
+    <h1>floatformat</h1>
+    <p>Pi : {{ p1 }}</p>
+    <p>Pi : {{ p1 | floatformat }}</p>
+    <p>Pi : {{ p1 | floatformat:2 }}</p>
+    <p>Pi : {{ p1 | floatformat:3 }}</p>
+
+    <p>Pi : {{ p1 | floatformat:-2 }}</p>
+    <p>Pi : {{ p1 | floatformat:-3 }}</p>
+
+    <h1>if</h1>
+    <p>{% if p1 > 3.14 %}Pi is greater than 3.14{% else %}Pi is less than or equal to 3.14{% endif %}</p>
+
+    <h1>for</h1>
+    {% for i in p1 %}
+        {{forloop.counter}}<p>{{ i }}</p>
+    {% endfor %}
+
+
+    {% for i in p1 reversed %}
+      <p>{{ i }}</p>
+        {% empty%}
+        <p>No items in the list</p>
+    {% endfor %}
+
+
+    <h1> hard coded values </h1>
+    <p>Pi : {{ student_1 }}</p>
+    <p>Pi : {{ student_1.st1 }}</p>
+    <p>Pi : {{ student_1.st1.name}}</p>
+    <p>Pi : {{ student_1.st1.age}}</p>
+
+    {% for key,value in student_1.items%}
+    {{ key }} : {{ value }} <br>
+      {% if value.items %}
+        {% for nested_key,nested_value in value.items%}
+          {{ nested_key }} : {{ nested_value }}
+        {% endfor %}
+      {% endif %}
+    {% endfor %}
+
+
+
+
+  </body>
+</html>

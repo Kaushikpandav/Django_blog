@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Django</title>
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="">
+  </head>
+  <body>
+    <h1>Learn Django with Greeky Shows</h1>
+    <p>Learn Django with Greeky Shows</p>
+
+    <h1>Filtered Data</h1>
+    <p>name : {{ name |upper}}</p>
+    <p>name : {{ desc |lower}}</p>
+    <p>name : {{ desc |upper|truncatewords:3}}</p> #truncatewords:3 means it will show only 3 words and rest will be replaced by ... (ellipsis)
+    <p>name : {{ desc |capfirst}}</p>
+    <p>name : {{ desc |default:"nothings"}}</p>
+    <p>name : {{ desc |length}}</p>
+    <p>name : {{ desc |slice:"2"}}</p>
+    <p>name : {{ desc |truncatechars:5}}</p>
+
+  </body>
+</html>
