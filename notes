@@ -96,20 +96,26 @@ urlpatten = [
 
 {% include 'nav.html' with name = "go" only%}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 ===================================================================================================
+
+
+26. ORM intro
+27. Models
+    IntegerField
+    BigIntegerField
+    AutoField
+    FloatField
+    CharField
+    TextField
+    BooleanField
+    EmailField
+    URLField
+    BinaryField
+
+
+
+
+
 
 ===================================================================================================
 
