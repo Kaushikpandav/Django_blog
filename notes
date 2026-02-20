@@ -100,7 +100,8 @@ urlpatten = [
 
 
 26. ORM intro
-27. Models
+27.
+28. Models
     IntegerField
     BigIntegerField
     AutoField
@@ -111,6 +112,8 @@ urlpatten = [
     EmailField
     URLField
     BinaryField
+
+29. retrive data fromDB
 
 
 
