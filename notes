@@ -1,6 +1,7 @@
 
 
-
+user : admin
+pass: learndjango
 
 
 1.  introduction...
@@ -114,9 +115,9 @@ urlpatten = [
     BinaryField
 
 29. retrive data fromDB
-
-
-
+30. admin pannel and superuser
+31. model class shown in DB !!
+32. admin pannel manupulation
 
 
 
