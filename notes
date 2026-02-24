@@ -118,8 +118,29 @@ urlpatten = [
 30. admin pannel and superuser
 31. model class shown in DB !!
 32. admin pannel manupulation
+33. djang form api 25-26
+    form attributes
 
+34. manual form field (too long and depth) : not need as of now so i've skeeped it !
+35. django form fields types and argument & widgets
 
+    from django import forms
+    class DAtaform (form.Form):
+        name = field.CharField(
+            widget = form.Textinput(
+                attrs = {'placeholder': 'type  here...',
+                          'class' : 'mycss'
+                }
+            )
+        )
+        EmailField()
+        IntegrField()
+
+    lots of fields, which is supported to this form..
+
+    ===
+
+    attributes to this all fields
 
 ===================================================================================================
 
