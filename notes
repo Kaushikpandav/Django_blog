@@ -122,7 +122,7 @@ urlpatten = [
     form attributes
 
 34. manual form field (too long and depth) : not need as of now so i've skeeped it !
-35. django form fields types and argument & widgets
+35. django form fields types and argument & widgets (ch 27)
 
     from django import forms
     class DAtaform (form.Form):
@@ -144,8 +144,7 @@ urlpatten = [
 
 ===================================================================================================
 
-===================================================================================================
-
+36. Django FORM POST:
 
 
 
