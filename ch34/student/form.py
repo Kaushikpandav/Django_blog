@@ -41,14 +41,23 @@ from django import forms
 
 #         return cleaned_data
 
-from django.core import validators
 
-def start_with_a(value):
-    if not value.startswith('A'):
-        raise validators.ValidationError("Value should start with 'A'.")
 
-# Built-in validators and custom validator
+# custom validator and built-in validators
+# from django.core import validators
+
+# def start_with_a(value):
+#     if not value.startswith('A'):
+#         raise validators.ValidationError("Value should start with 'A'.")
+
+# # Built-in validators and custom validator
+# class StudentRegistrationForm(forms.Form):
+#     name = forms.CharField(max_length=100, validators=[validators.RegexValidator(regex='^[a-zA-Z]+$', message='Name should only contain letters.'), validators.MinLengthValidator(2, message='Name should be at least 2 characters long.')])
+#     email = forms.EmailField(validators=[start_with_a])
+#     password = forms.CharField(widget=forms.PasswordInput)
+
+
 class StudentRegistrationForm(forms.Form):
-    name = forms.CharField(max_length=100, validators=[validators.RegexValidator(regex='^[a-zA-Z]+$', message='Name should only contain letters.'), validators.MinLengthValidator(2, message='Name should be at least 2 characters long.')])
-    email = forms.EmailField(validators=[start_with_a])
+    name = forms.CharField(max_length=100)
+    email = forms.EmailField()
     password = forms.CharField(widget=forms.PasswordInput)

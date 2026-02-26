@@ -7,9 +7,7 @@
   <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>
-      registe
-    </title>
+    <title>success</title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="">
@@ -18,34 +16,12 @@
     <!--[if lt IE 7]>
       <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
-
-
-
-    {% comment %} Regular {% endcomment %}
     <h1>
-      Register
+      Registration Successful
     </h1>
-    <form action="" method="post">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Submit</button>
-    </form>
-
-    {% comment %} custom error message {% endcomment %}
-    <h1>
-      Register
-    </h1>
-    <form action="" method="post">
-      {% csrf_token %}
-      {{field.label_tag}} {{field}}
-      {% if field.errors %}
-        <div class="error">
-          <span class="error-icon">{{ field.errors }}</span>
-        </div>
-      {% endif %}
-      <button type="submit">Submit</button>
-    </form>
-
+    <p>
+      Thank you, {{ name }}, for registering!
+    </p>
     <script src="" async defer></script>
   </body>
 </html>
