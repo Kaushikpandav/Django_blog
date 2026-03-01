@@ -1,0 +1,34 @@
+
+
+
+user : admin
+pass : userauth
+
+# user auth with django and rest (serializer + view and API)
+
+
+- create UI dashborad
+- setup backend and do initial migrations
+- install restframewrok (pip install django restframework)
+    add in setting
+
+- create 2 app: accounts and api
+
+- models, serialization, views , api then test it
+
+
+#steps
+
+- user models is built in
+- create serializer.py file in account app.
+
+    from django.contrib.auth.models import user
+    from rest_framwork import serializer
+
+    class Userserializer(serializer.modelserializer):
+
+        pass = serializer.CharField(write_pnly = Ture)
+        class Meta:
+            model = User
+            fields = ['username','email','pass']
+

@@ -3,23 +3,24 @@ import React, { useState, createContext } from "react"
 export const stockContext = createContext()
 export const userContext = createContext()
 
-import Hello from "./components/hello"
-import Learn from "./components/learn"
-import Props from "./components/props"
-import Events from "./components/Events"
-import Lifting_state from "./components/lifting_state"
-import Hooks from "./components/hooks"
+import Hello from "./components/learn/hello"
+import Learn from "./components/learn/learn"
+import Props from "./components/learn/props"
+import Events from "./components/learn/Events"
+import Lifting_state from "./components/learn/lifting_state"
+import Hooks from "./components/learn/hooks"
 import CounterApp from "./components/Hooks/CounterAppUseState"
 import UseEffect from "./components/Hooks/UseEffect"
 import UseMemo from "./components/Hooks/UseMemo"
 import Child1 from "./components/Hooks/Child1"
 import Useref from "./components/Hooks/Useref"
 import CustomHooks from "./components/custom_Hooks/CustomHooks"
-import ConditionalRendering from "./components/ConditionalRendering"
-import Map from "./components/Map"
-import Inlinecss from "./components/Inlinecss"
-import Loadimages from "./components/loadimages"
-import Forms from "./components/Forms"
+import ConditionalRendering from "./components/learn/ConditionalRendering"
+import Map from "./components/learn/Map"
+import Inlinecss from "./components/learn/Inlinecss"
+import Loadimages from "./components/learn/Loadimages"
+import Forms from "./components/learn/Forms"
+import './assets/css/style.css'
 
 function App() {
   let stock = 100
