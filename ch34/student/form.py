@@ -1,6 +1,12 @@
+from .models import Profile
+
 from django import forms
 
-
+# regular form
+# class StudentRegistrationForm(forms.Form):
+#     name = forms.CharField(max_length=100)
+#     email = forms.EmailField()
+#     password = forms.CharField(widget=forms.PasswordInput)
 
 # # specific
 # class StudentRegistrationForm(forms.Form):
@@ -57,7 +63,42 @@ from django import forms
 #     password = forms.CharField(widget=forms.PasswordInput)
 
 
-class StudentRegistrationForm(forms.Form):
-    name = forms.CharField(max_length=100)
-    email = forms.EmailField()
-    password = forms.CharField(widget=forms.PasswordInput)
+
+# django Model Form
+class StudentRegistrationForm(forms.ModelForm):
+
+    # to override model
+    name = forms.CharField(max_length=200)
+
+    # extra field | this will not bale to store in DB it's just to map same logic
+    confirm_pass = forms.CharField(
+        widget=forms.PasswordInput()
+    )
+
+    class Meta:
+        model = Profile
+
+        # fields = ['name', 'email', 'password']
+        # if i want to include all fields then i can use __all__
+        fields = '__all__'
+
+        # if i want to exclude any field then i can use exclude
+        # exclude = ['confirm_pass']
+
+        # if i want to change label or error message or widget then i can use below code
+        labels = {
+            'name': 'Full Name',
+            'email': 'Email Address',
+            'password': 'Password',
+        }
+        error_messages = {
+            'email' : {'required':'field required'}
+        }
+        widgets = {
+            'password':forms.PasswordInput(attrs={
+                'class':'pwdclass'
+            }),
+            'name':forms.TextInput(attrs={
+                'class':'pwdclass', 'placeholder':'enter your name..'
+            })
+        }

@@ -13,19 +13,24 @@ def register(request):
             name = form.cleaned_data['name']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
+            con_pass = form.cleaned_data['confirm_pass']
 
             # save DB
-            # Profile.objects.create(name=name, email=email, password=password)
+            # p = Profile(name=name, email=email, password=password)
+            # p.save()
+            # or
+            Profile.objects.create(name=name, email=email, password=password, confirm_pass=con_pass)
 
             # update
-            # Profile.objects.filter(email=email).update(name=name, email=email, password=password)
+            # Profile.objects.filter(email=email).update(name=name, email=email, password=password) or
             # user  = Profile(id=3, name=name, email=email, password=password)
             # user.save()
 
             # delete
-            delete_user = Profile(id=1)
-            delete_user.delete()
+            # delete_user = Profile(id=1)
+            # delete_user.delete()
 
+            # return HttpResponseRedirect('/student')
             return render(request, 'success.html', {'name': name})
     else:
       form = StudentRegistrationForm()

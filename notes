@@ -237,7 +237,7 @@ class StudentRegistrationForm(forms.Form):
       <button type="submit">Submit</button>
     </form>"""
 
-# 40. save update delete form data in DB | ch34
+# 40. save update delete form data in DB | ch34 (form type as well)
 
 
 # """def register(request):
@@ -269,7 +269,8 @@ class StudentRegistrationForm(forms.Form):
 # """
 ===================================================================================================
 
-# 41. Model form in Djnago:
+# 41. Model form in Djnago: all things about model and form together
+# 42.
 
 
 
