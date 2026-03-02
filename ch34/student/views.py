@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .form import StudentRegistrationForm
+from .form import StudentRegistrationForm, TeacherRegistrationForm
 from .models import Profile
 # Create your views here.
 def register(request):
@@ -34,4 +34,42 @@ def register(request):
             return render(request, 'success.html', {'name': name})
     else:
       form = StudentRegistrationForm()
+    return render(request, 'register.html', {'form': form})
+
+
+# model form inheritance view
+def register(request):
+
+    if request.method == 'POST':
+        form = StudentRegistrationForm(request.POST)
+        if form.is_valid():
+
+            student_name = form.cleaned_data['student_name']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+
+            # save DB
+            Profile.objects.create(student_name=student_name, email=email, password=password)
+
+            return render(request, 'success.html', {'name': student_name})
+    else:
+      form = StudentRegistrationForm()
+    return render(request, 'register.html', {'form': form})
+
+def teacher_register(request):
+
+    if request.method == 'POST':
+        form = TeacherRegistrationForm(request.POST)
+        if form.is_valid():
+
+            teacher_name = form.cleaned_data['teacher_name']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+
+            # save DB
+            Profile.objects.create(teacher_name=teacher_name, email=email, password=password)
+
+            return render(request, 'success.html', {'name': teacher_name})
+    else:
+      form = TeacherRegistrationForm()
     return render(request, 'register.html', {'form': form})

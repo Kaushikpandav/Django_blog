@@ -267,10 +267,11 @@ class StudentRegistrationForm(forms.Form):
 #       form = StudentRegistrationForm()
 #     return render(request, 'register.html', {'form': form})
 # """
-===================================================================================================
+# ===================================================================================================
 
 # 41. Model form in Djnago: all things about model and form together
-# 42.
+# 42. model form inheritence and custom field
+
 
 
 
