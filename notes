@@ -309,7 +309,8 @@ class StudentRegistrationForm(forms.Form):
 # ===================================================================================================
 
 
-# 46. CKEditor 5 (Rich text editor)
+# 46. CKEditor 5 (Rich text editor) | ch38
+# 47. dynamic URL and custom path converter (dj5)
 
 
 

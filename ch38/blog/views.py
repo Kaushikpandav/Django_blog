@@ -15,3 +15,7 @@ def home(request):
 
 def about(request):
     return render(request, 'blog/about.html')
+
+def profile(request, pk):
+    post = Post.objects.get(id=pk)
+    return render(request, 'blog/profile.html', {'post': post})
