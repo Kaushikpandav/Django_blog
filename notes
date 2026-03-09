@@ -271,24 +271,50 @@ class StudentRegistrationForm(forms.Form):
 
 # 41. Model form in Djnago: all things about model and form together
 # 42. model form inheritence and custom field
+# 43. QR generator
+# 44. custiom django filter:
+
+    # create file name : custom_filter.py
+
+    # from django import template
+    # register = template.Library()
+
+
+
+    # wihtout decorator
+
+    # def multiply(value, arg):
+    #     return value * arg
+    # def replace(value, arg):
+    #     return value.replace(arg, '')
+    # def custom_filter(value):
+    #     return value.upper()
+
+    # register.filter('multiply', multiply)
+    # register.filter('replace', replace)
+    # register.filter('custom_filter', custom_filter)
+
+    # with decorator
+    @register.filter(name='multiply')
+    def multiply(value, arg):
+        return value * arg
+
+    # in .html
+
+    {% load custom_filter %}
+    # {{ 5|multiply:3 }}  <!-- output : 15 -->
+    # {{ "hello world"|replace:"o" }}  <!-- output : hell wrld -->
+    # {{ "hello world"|custom_filter }}  <!-- output : HELLO WORLD -->
+
+# ===================================================================================================
+
+
+# 46. CKEditor 5 (Rich text editor)
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-===================================================================================================
 
 ===================================================================================================
 ===================================================================================================
