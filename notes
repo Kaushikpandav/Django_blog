@@ -310,12 +310,30 @@ class StudentRegistrationForm(forms.Form):
 
 
 # 46. CKEditor 5 (Rich text editor) | ch38
-# 47. dynamic URL and custom path converter (dj5)
+# 47. dynamic URL and custom path converter (dj5) | dynamic urls
+# 48. Display success and error message in django
+
+    # debug
+    # info
+    # success
+    # Warning
+    # error
 
 
 
+    # messages.add_message(request, messages.SUCCESS,'This is a success message')
+    # messages.add_message(request, messages.INFO,'This is an info message')
+    # messages.add_message(request, messages.WARNING,'This is a warning message')
+    # messages.add_message(request, messages.ERROR,'This is an error message')
 
+    # messages.success(request, 'This is a success message')
+    # messages.info(request, 'This is an info message')
+    # messages.warning(request, 'This is a warning message')
+    # messages.error(request, 'This is an error message')
 
+    # # to print aor display
+    # print(messages.get_level(request))
+    # print(messages.set_level(request, messages.DEBUG))
 
 ===================================================================================================
 ===================================================================================================

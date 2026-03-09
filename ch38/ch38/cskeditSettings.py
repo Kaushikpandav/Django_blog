@@ -1,6 +1,6 @@
 import os
 
-from ch10.ch10 import settings
+# from ch10.ch10 import settings
 from django.core.files.storage import FileSystemStorage
 
 customColorPalette = [

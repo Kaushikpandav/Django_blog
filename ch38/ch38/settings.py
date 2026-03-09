@@ -10,11 +10,11 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
+from django.contrib.messages import constants as messages_s
 from pathlib import Path
 from .cskeditSettings import *
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
@@ -119,3 +119,9 @@ USE_TZ = True
 STATIC_URL = 'static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR, 'media'
+
+# it's for messages used to change the class of the message in html
+MESSAGE_TAGS = {messages_s.DEBUG: 'debug',
+                messages_s.INFO: 'info',
+                messages_s.SUCCESS: 'success',                   messages_s.WARNING: 'warning',
+                messages_s.ERROR: 'danger'}

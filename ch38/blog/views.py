@@ -1,11 +1,27 @@
 from django.shortcuts import render
 from .form import PostForm
 from .models import Post
+from django.contrib import messages
 
 
 # Create your views here.
 
 def home(request):
+
+    messages.add_message(request, messages.SUCCESS,'This is a success message')
+    messages.add_message(request, messages.INFO,'This is an info message')
+    messages.add_message(request, messages.WARNING,'This is a warning message')
+    messages.add_message(request, messages.ERROR,'This is an error message')
+
+    messages.success(request, 'This is a success message')
+    messages.info(request, 'This is an info message')
+    messages.warning(request, 'This is a warning message')
+    messages.error(request, 'This is an error message')
+
+    # to print aor display
+    print(messages.get_level(request))
+    print(messages.set_level(request, messages.DEBUG))
+
     form = PostForm()
     if request.method == 'POST':
         form = PostForm(request.POST)
