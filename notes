@@ -332,8 +332,34 @@ class StudentRegistrationForm(forms.Form):
     # messages.error(request, 'This is an error message')
 
     # # to print aor display
-    # print(messages.get_level(request))
+    # print(messages.get_lev  el(request))
     # print(messages.set_level(request, messages.DEBUG))
+
+
+# 49. book review app with all the above concepts ||
+# 50 . user authentication and authorization in django
+# 51. complete authentication system with login, logout, register, password reset, email verification, profile management, and social authentication (Google, Facebook, etc.)
+
+
+# create - account , customer and seller app..
+
+# - Account
+
+
+
+# - Customer
+# - Seller
+
+
+
+
+
+
+
+
+
+
+
 
 ===================================================================================================
 ===================================================================================================
