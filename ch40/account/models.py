@@ -1,5 +1,11 @@
 from django.db import models
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, PermissionsMixin
+
+
+# post save operation
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from core.utils import assign_permission
 
 class usermanager(BaseUserManager):
 
@@ -34,7 +40,7 @@ class usermanager(BaseUserManager):
     return user
 
 # class with custom user model
-class user(AbstractBaseUser):
+class user(AbstractBaseUser, PermissionsMixin):
   email = models.EmailField(verbose_name="Email", unique=True)
   name = models.CharField(max_length=255)
   city = models.CharField(max_length=255)
@@ -55,20 +61,46 @@ class user(AbstractBaseUser):
   def __str__(self):
       return self.email
 
-  def has_perm(self, perm, obj=None):
-    """
-    Returns True if the user has the given permission. If the user is active and is a
-    superuser, this method will always return True.
+  # def has_perm(self, perm, obj=None):
+  #   """
+  #   Returns True if the user has the given permission. If the user is active and is a
+  #   superuser, this method will always return True.
 
-    :param perm: The permission to check.
-    :param obj: The object to check the permission against.
-    :return: True if the user has the permission, False otherwise.
-    """
-    return self.is_superuser
+  #   :param perm: The permission to check.
+  #   :param obj: The object to check the permission against.
+  #   :return: True if the user has the permission, False otherwise.
+  #   """
+  #   return self.is_superuser
+
+  # def has_module_perms(self, app_label):
+  #   """
+  #   Returns True if the user has any permissions in the given app_label.
+  #   If the user is active and is_superuser, this method will always return True.
+  #   """
+  #   return self.is_superuser
+
+  # need to saperate due to permission class to not getting overide permission
+  def has_perm(self, perm, obj=None):
+    return self.is_superuser or super().has_perm(perm, obj)
 
   def has_module_perms(self, app_label):
-    """
-    Returns True if the user has any permissions in the given app_label.
-    If the user is active and is_superuser, this method will always return True.
-    """
-    return self.is_superuser
+    return self.is_superuser or super().has_module_perms(app_label)
+
+
+
+
+
+# Just for direct testing from admin | view execute only while api hiy..
+@receiver(post_save, sender=user)
+def handle_user_permissions(sender, instance, created, **kwargs):
+    # 1. Automatically set staff status for sellers if not already set
+    if instance.is_seller and not instance.is_staff:
+        # Use .update() to avoid re-triggering this post_save signal
+        user.objects.filter(pk=instance.pk).update(is_staff=True)
+
+    # 2. Assign permissions based on role booleans (Only on creation)
+    if created:
+        if instance.is_seller:
+            assign_permission(instance, 'seller')
+        elif instance.is_customer:
+            assign_permission(instance, 'customer')

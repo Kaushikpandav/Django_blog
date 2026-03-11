@@ -7,7 +7,7 @@ from django.contrib.auth.admin import UserAdmin
 #   list_display = ['name', 'email', 'password']
 
 class usermodeladmin(UserAdmin):
-  list_display = ['id', 'name', 'email', 'is_active', 'is_staff', 'is_superuser', 'is_customer', 'is_seller', 'created_at', 'updated_at']
+  list_display = ['id', 'name', 'email', 'is_active', 'is_staff', 'is_superuser', 'is_customer', 'is_seller', 'created_at', 'updated_at',]
 
   list_filter = ['is_active', 'is_staff', 'is_superuser', 'is_customer', 'is_seller']
 
@@ -19,7 +19,7 @@ class usermodeladmin(UserAdmin):
   fieldsets = [
     ('credential info', {'fields': ['name', 'email', 'password']}),
     ('persnal Inof', {'fields': ['city']}),
-    ('Permissions', {'fields': ['is_active', 'is_staff', 'is_superuser', 'is_customer', 'is_seller']}),
+    ('Permissions', {'fields': ['is_active', 'is_staff', 'is_superuser', 'is_customer', 'is_seller', 'groups', 'user_permissions']}),
     # ('Important dates', {'fields': ['created_at', 'updated_at']})
   ]
 
@@ -31,6 +31,6 @@ class usermodeladmin(UserAdmin):
     })
   ]
 
-  filter_horizontal = []
+  filter_horizontal = ['groups', 'user_permissions']
 
 admin.site.register(user, usermodeladmin)

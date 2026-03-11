@@ -372,16 +372,51 @@ class StudentRegistrationForm(forms.Form):
 
 # 53. role based registaration
 
-
-
-
-
-
-
-
-
-
-
 ===================================================================================================
+
+# 54. user permission
+
+
+    # 1) induvidual
+    # 2) group
+
+
+    # admin side permision :
+        # restrict view based on user permission.. (in admin side only)
+
+    # user side permission :
+
+        # 1) view level: (work on given permission level)
+            # from django.contrib.auth.decorators import permission_required
+
+            # @permission_required('account.view_user', raise_exception=True)
+            # def user_list(request):
+            #     pass
+            # @permission_required('product.change_product', raise_exception=True)
+            # def product_list(request):
+            #     pass
+
+        # 2) Template level:
+
+            # {% if user|has_perm:'account.view_user' %}
+            #     {% include 'user_list.html' %}
+            # {% endif %}
+
+            # {% if user|has_perm:'product.change_product' %}
+            #     {% include 'product_list.html' %}
+            # {% endif %}
+
+            # or
+
+            # {% if perm.product.change_product %}
+            #     {% include 'product_list.html' %}
+            # {% endif %}
+
+            # {% if perm.account.view_user %}
+            #     {% include 'user_list.html' %}
+            # {% endif %}
+
+# 55. cookies
+
 ===================================================================================================
 ===================================================================================================
