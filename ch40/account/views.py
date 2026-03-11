@@ -30,6 +30,15 @@ def register(request):
             user = form.save(commit=False)
             user.set_password(form.cleaned_data['password1'])
             user.is_active = False
+
+            role = form.cleaned_data['role']
+            if role == 'customer':
+                user.is_customer = True
+                user.is_seller = False
+            elif role == 'seller':
+                user.is_customer = False
+                user.is_seller = True
+
             user.save()
             messages.success(request, 'Registration successful. Please check your email for verification.')
 

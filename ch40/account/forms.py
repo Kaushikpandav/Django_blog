@@ -3,6 +3,11 @@ from .models import user
 
 
 class userRegistrationForm(forms.ModelForm):
+  ROLE_CHOISES = (
+    ('customer', 'customer'),
+    ('seller', 'seller'),
+  )
+  role = forms.choiceField(choices=ROLE_CHOISES, widget=forms.Select)
   password = forms.CharField(widget=forms.PasswordInput)
   confirm_password = forms.CharField(widget=forms.PasswordInput)
 
