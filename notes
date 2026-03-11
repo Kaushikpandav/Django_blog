@@ -338,18 +338,39 @@ class StudentRegistrationForm(forms.Form):
 
 # 49. book review app with all the above concepts ||
 # 50 . user authentication and authorization in django
-# 51. complete authentication system with login, logout, register, password reset, email verification, profile management, and social authentication (Google, Facebook, etc.)
+# 51. complete authentication system with login, logout, register, password reset, email verification, profile management, and social authentication (Google, Facebook, etc.)   ch40
 
 
 # create - account , customer and seller app..
 
 # - Account
-
-
-
 # - Customer
 # - Seller
 
+# 52. Restrict view based on USer role... (same user AUTH app )
+
+    # - even with login_required decorator you'll not able to protect all API points
+    # - to protecct all API points you need to use
+
+    # from functools import wraps
+    # from django.http import HttpResponseForbidden
+    # from django.contrib.auth.decorators import login_required
+
+
+    # def check_role(role):
+    #     def decorator(view_func):
+    #         @wraps(view_func)
+    #         def _wrapped_view(request, *args, **kwargs):
+    #             user  = request.user
+    #             if role == 'customer' and not user.is_customer:
+    #                 return HttpResponseForbidden("You don't have permission to access this page.")
+    #             if role == 'seller' and not user.is_seller:
+    #                 return HttpResponseForbidden("You don't have permission to access this page.")
+    #             return view_func(request, *args, **kwargs)
+
+    # now you can used it directlly with @check_role('customer')
+
+# 53. role based registaration
 
 
 
