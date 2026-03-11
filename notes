@@ -1,18 +1,18 @@
 
 
-user : admin
+user: admin
 pass: learndjango
 
 
 1.  introduction...
 
 
-===================================================================================================
+== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
 
 
 2. djnago(5)
 
-- follow (MVT) structure (2003),
+- follow(MVT) structure(2003),
 - admin pannel
 - ORM
 - authentication system
@@ -20,14 +20,14 @@ pass: learndjango
 - varsatile
 - security
 
-===================================================================================================
+== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
 
 3. pre-requisite
 
 - html, css, javascript, sql, python, MVT, PIP
 
 
-===================================================================================================
+== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
 
 4. create ENV and download django-admin
 
@@ -39,8 +39,8 @@ pass: learndjango
 
 7. directery strcuture:
 
-- wagi : web server gateway interface
-- asgi : asyncronous server gateway interface
+- wagi: web server gateway interface
+- asgi: asyncronous server gateway interface
 - settinngs
 - urls
 
@@ -55,7 +55,7 @@ pass: learndjango
 - creatign apps,
 - introduce files and admin pannel
 
-===================================================================================================
+== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
 
 
 12. Function based view:
@@ -65,7 +65,7 @@ pass: learndjango
 15. MVT
 16. django templates
 17. depth dive in templates
-18. import style , js ,img
+18. import style, js, img
 19. inheritance or extends
 20. inheritence with static files
 21. boostrap
@@ -78,26 +78,26 @@ urlpatten = [
   path('/home', home, name=homepage)
 ]
 
-<ul>
-    <li><a href = "{% url 'homepage' %}">Home</a></li>
-</ul>
+<ul >
+    <li > <a href = "{% url 'homepage' %}" > Home < /a > </li >
+</ul >
 
-25. template inside templates using : include
+25. template inside templates using: include
 
 
-<!-- nav.html -->
-<ul>
-    <li><a href = "{% url 'homepage' %}">Home</a></li>
-    <li><a href = "{% url 'homepage' %}">about</a></li>
-    <li><a href = "{% url 'homepage' %}">connect</a></li>
-    <li><a href = "{% url 'homepage' %}">news</a></li>
-</ul>
+<!-- nav.html - ->
+<ul >
+    <li > <a href = "{% url 'homepage' %}" > Home < /a > </li >
+    <li > <a href = "{% url 'homepage' %}" > about < /a > </li >
+    <li > <a href = "{% url 'homepage' %}" > connect < /a > </li >
+    <li > <a href = "{% url 'homepage' %}" > news < /a > </li >
+</ul >
 
-<!-- home.html -->
+<!-- home.html - ->
 
-{% include 'nav.html' with name = "go" only%}
+{ % include 'nav.html' with name = "go" only%}
 
-===================================================================================================
+== == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == == =
 
 
 26. ORM intro
@@ -121,7 +121,7 @@ urlpatten = [
 33. djang form api 25-26
     form attributes
 
-34. manual form field (too long and depth) : not need as of now so i've skeeped it !
+34. manual form field(too long and depth): not need as of now so i've skeeped it !
 35. django form fields types and argument & widgets (ch 27)
 
     from django import forms
@@ -416,7 +416,65 @@ class StudentRegistrationForm(forms.Form):
             #     {% include 'user_list.html' %}
             # {% endif %}
 
-# 55. cookies
+# 55. cookies | 41
 
+# HttpResponse.setcookie(key,
+#                         value,
+#                         max_age=None, = 3600
+#                         expires=None, = datetime.utcnow() + timedelta(days=365)
+#                         path='/',
+#                         domain=None,
+#                         secure=None, = False
+#                         httponly=None, = False
+#                         samesite=None) = None
+
+
+# def setcookie(request):
+#   response = render(request, 'student/setcookie.html')
+#   response.set_cookie('name', 'Django')
+#   # response.set_cookie('token', '123456', max_age=3600)
+#   # response.set_cookie('name', 'Django', expires=datetime.now() + datetime.timedelta(days=1))
+#   return response
+
+# def getcookie(request):
+#   cookie_name = request.COOKIES['name']
+#   cookie_token = request.COOKIES['token']
+
+#   total = {
+#     'name': cookie_name,
+#     'token': cookie_token
+#   }
+
+#   return render(request, 'student/getcookie.html', total)
+
+# def deletecookie(request):
+#   response = render(request, 'student/deletecookie.html')
+#   response.delete_cookie('name')
+#   return response
+
+# def setsignedcookie(request):
+#   response = render(request, 'student/setsignedcookie.html')
+#   response.set_signed_cookie('name', 'Django', salt='secret')
+#   return response
+
+# def getsignedcookie(request):
+#   name = request.get_signed_cookie('name', salt='secret', default='Guest')
+#   return render(request, 'student/getsignedcookie.html', {'name': name})
 ===================================================================================================
+
+# 56. session
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 ===================================================================================================
