@@ -798,3 +798,119 @@ class StudentRegistrationForm(forms.Form):
         # user_login_failed()
 
 # 63. custom signals
+
+
+
+    # from django.dispatch import Signal, reciever
+
+    # notification = Signal()
+
+    # @reciever(notification)
+    # def send_notification(sender, **kwargs):
+    # print(f"User send_notification: {sender}")
+    # print(f"sender : {sender}")
+    # print(f"kwargs : {kwargs}")
+
+    # # in view
+    # def index(request):
+    #     notification.send(sender=index, request=request, user = [1,2,3])
+    #     return render(request, 'blog/index.html')
+
+
+# 64. custom Middleware | ch43
+
+    # function based and class based
+
+    # - add in setting
+    # - it will work for all view, there is not any concept for induavidual protection...
+    # - here it first initialize from 3-2-1 and get request from 1-2-3 then at time of response it's 3-2-1 : when you have more then one middleware
+
+    # function based
+    # def function_middle(get_response):
+
+    #   print("one time initialization")
+    #   def middleware(request):
+    #     print("Before View")
+    #     response = get_response(request)
+    #     print("After View")
+    #     return response
+    #   return middleware
+
+    # def function_middle(get_response):
+
+    #   print("one time initialization")
+    #   def middleware(request):
+    #     print("Before View")
+    #     # response = get_response(request)
+    #     # response = HttpResponse("Middle ware")
+    #     response = render(request, 'blog/home.html')
+    #     print("After View")
+    #     return response
+    #   return middleware
+
+
+    # Class based
+    # class function_middle:
+    # def __init__(self, get_response):
+    #     print("one time initialization")
+    #     self.get_response = get_response
+
+    # def __call__(self, request):
+    #     print("Before View")
+    #     response = self.get_response(request)
+    #     print("After View")
+    #     return response
+
+    # class function_middle:
+    # def __init__(self, get_response):
+    #     print("one time initialization")
+    #     self.get_response = get_response
+
+    # def __call__(self, request):
+    #     print("Before View")
+    #     response = self.get_response(request)
+    #     print("After View")
+    #     return response
+
+    # def process_view(request, *args, **kwargs):
+    #     print("process view")
+    #     return None
+    # # here if return is None, then view will able to execute else view will not able to execute
+
+
+    # class function_middle:
+    # def __init__(self, get_response):
+    #     print("one time initialization")
+    #     self.get_response = get_response
+
+    # def __call__(self, request):
+    #     print("Before View")
+    #     response = self.get_response(request)
+    #     print("After View")
+    #     return response
+
+    # def process_exception(self, request, exception):
+    #     print("process exception")
+    #     msg = exception
+    #     class_name = exception.__class__.__name__
+    #     return render(request, 'blog/exception.html', {'msg': msg, 'class_name': class_name})
+    # Note: it's run when any exception occur
+
+
+
+    # class function_middle:
+    # def __init__(self, get_response):
+    #     print("one time initialization")
+    #     self.get_response = get_response
+
+    # def __call__(self, request):
+    #     print("Before View")
+    #     response = self.get_response(request)
+    #     print("After View")
+    #     return response
+
+    # def process_templates_response(self, request, response):
+    #     print("process templates response")
+    #     response.context_data['name'] = 'Django'
+    #     return response
+    # Note: it's run when template render
