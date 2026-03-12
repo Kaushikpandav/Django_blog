@@ -796,3 +796,5 @@ class StudentRegistrationForm(forms.Form):
         # user_login_in()
         # user_login_out()
         # user_login_failed()
+
+# 63. custom signals
