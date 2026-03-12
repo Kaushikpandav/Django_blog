@@ -572,7 +572,7 @@ class StudentRegistrationForm(forms.Form):
 
 ===================================================================================================
 
-# 58. Cashing
+# 58. Cashing | ch41
 
     # 1. full site cach
     # 2. perticular view cach
@@ -784,3 +784,15 @@ class StudentRegistrationForm(forms.Form):
     # cache,touch(key, timeout=DEFAULT_TIMEOUT, version=None)
     # cache.has_key(key, version=None)
     # cache.add(key, value, timeout=None, version=None) if "key not exist" then only add
+
+===========================================================================================
+
+# 62. signals: pre_save, post_save, post_delete , pre_delete | ch42
+
+    # - login count, max 3 time login , after 3 time logout, send email to user etc...
+
+    # 1) Login / Logoutsignals
+
+        # user_login_in()
+        # user_login_out()
+        # user_login_failed()
