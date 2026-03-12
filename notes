@@ -558,16 +558,229 @@ class StudentRegistrationForm(forms.Form):
 
 
 # # in seeting
-
 # SESSION_COOKIE_AGE = 60 * 60 * 24 * 7
 # SESSION_COOKIE_NAME = 'sessionid'
 # SESSION_COOKIE_PATH = '/home'
 
 
+# 57. file based store instend of DB
 
+# # in seeting
 
-
-
-
+# SESSION ENGINE = 'django.contrib.sessions.backends.file'
+# SESSION_FILE_PATH = BASE_DIR / 'sessions'
 
 ===================================================================================================
+
+# 58. Cashing
+
+    # 1. full site cach
+    # 2. perticular view cach
+    # 3. templates fragment cach
+
+
+    # store
+
+    # 2. DB
+    # 1. file based
+    # 3. localmemory
+
+
+    # example
+    # - add a middle ware
+
+    # MIDDLEWARE = [
+    #     'django.middleware.cache.UpdateCacheMiddleware', #this
+    #     'django.middleware.common.CommonMiddleware',
+    #     'django.middleware.cache.FetchFromCacheMiddleware', #and this
+    # ]
+
+    # CACHE_MIDDLEWARE_SECONDS = 60
+
+    # - add cache
+
+
+
+    #DB cache
+    # CACHES = {
+    #     'default': {
+    #         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+    #         'LOCATION': 'my_cache_table',
+            #    'OPTIONS': {
+            #        'MAX_ENTRIES': 1000
+            #    }
+    #     }
+    # }
+
+
+    # file based
+    # CACHES = {
+    #     'default': {
+    #         'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
+    #         'LOCATION': 'student_cache',
+            #    'OPTIONS': {
+            #        'MAX_ENTRIES': 1000
+            #    }
+    #     }
+    # }
+
+    # local memory
+    # CACHES = {
+    #     'default': {
+    #         'BACKEND': 'django.core.cache.backends.localmem.LocalMemCache',
+    #         'LOCATION': 'student_cache',
+            #    'OPTIONS': {
+            #        'MAX_ENTRIES': 1000
+            #    }
+    #     }
+    # }
+
+    # - Do make and migrate then python manege.py createcachetable
+
+
+# 59. perticular view cache:
+
+
+    # CACHE_MIDDLEWARE_SECONDS = 60
+    # - add cache
+
+    #DB cache
+    # CACHES = {
+    #     'default': {
+    #         'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+    #         'LOCATION': 'my_cache_table',
+            #    'OPTIONS': {
+            #        'MAX_ENTRIES': 1000
+            #    }
+    #     }
+    # }
+
+    # - Do make and migrate then python manege.py createcachetable
+
+    # from django.views.decorators.cache import cache_page
+
+
+    # # in url
+    # path('set/', setsession, name='setsession'),
+    # path('setss/', cache_page(60)(setsession), name='setsession'),
+    # path('setcc/', setsession, name='setsession'),
+    # path('get/', getsession, name='getsession'),
+    # path('del/', cache_page(60)(deletesession), name='deletesession'),
+
+
+    # # in view
+    # @cache_page(timeout = 60 * 15, key_prefix='test')
+    # def home(request):
+    #   return render(request, 'student/home.html')
+
+# 60. Templates Fragment Caching
+
+    # in .html
+
+    {% load cache %}
+    # <!DOCTYPE html>
+    # <html>
+    # <head>
+    #     <meta charset="utf-8">
+    #     <title>
+    #     clearsession
+    #     </title>
+    # </head>
+    # <body>
+
+    # {% cache 60 name__ %}
+    # <h1> {{name}} </h1>
+    # {% endcache %}
+
+
+    #     <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
+    # </body>
+    # </html>
+
+# 61. Low level caching
+
+    # - perticular object targeted: list, tuple, dict, set
+
+    # from django.core.cache import cache
+
+    # cache.set(key, value, timeout=None, version=None)
+    # cache.get(key, default=None, version=None)
+
+    # ex :
+        # def course(request):
+        #     course = cache.get('course', course, timeout=60*60*24, version='v1')
+        #     if not course:
+        #         cache.set('course', course, timeout=60*60*24, version='v1')
+                #   course = cache.get('course', course, timeout=60*60*24, version='v1')
+
+        #     else:
+        #         cache.get('course', course, timeout=60*60*24, version='v1')
+        #     return render(request, 'student/course.html', {'course': course})
+
+        # or
+
+    # cache.get_or_set(key, default=None, timeout=None, version=None)
+
+    # ex.
+        # def course(request):
+            #   cache.get_or_set('course', course, timeout=60*60*24, version='v1')
+            #   cache.get_or_set('course', course, timeout=60*60*24, version='v2')
+        #     return render(request, 'student/course.html', {'course': course})
+
+
+    # cache.set_many(dict, timeout=None, version=None)
+    # ex.
+
+    #    def caurse(request):
+    #         tools = {
+    #             'django': 'Django',
+    #             'python': 'Python',
+    #             'flask': 'Flask'
+    #         }
+
+    #         cache.set_many(tools, timeout=60*60*24, version='v1')
+    #         get_val = cache.get_many(tools, version='v1')
+    #         return render(request, 'student/course.html',get_val)
+
+    # cache.incr(key, delta=1, version=None)
+    # cache.decr(key, delta=1, version=None)
+    # ex.
+    #     def number(request):
+    #         cache.set('number', 10, version='v1')
+    #         number = cache.get('number', 0, version='v1')
+    #         cache.incr('number', delta=1, version='v1')
+    #         cache.decr('number', delta=1, version='v1')
+    #         return render(request, 'student/number.html', {'number': number})
+
+
+    # cache.delete(key, version=None) | delete specific key
+    # cache.delete_many(keys, version=None)
+    # EX.
+    #     def course(request):
+
+    #         cache.delete_many('tools', version='v1')
+    #         return render(request, 'student/course.html')
+
+    # cache.clear() | whne you want to clear all cache
+    # ex.
+    #     def number(request):
+    #         cache.set('number', 10, version='v1')
+    #         number = cache.get('number', 0, version='v1')
+    #         cache.clear()
+    #         return render(request, 'student/number.html', {'number': number})
+        # or
+
+    # python manage.py clearcache
+
+    # cache.close()
+    # ex.
+    #     def number(request):
+    #         cache.set('number', 10, version='v1')
+    #         number = cache.get('number', 0, version='v1')
+    #         cache.close()
+    #         return render(request, 'student/number.html', {'number': number})
+
+    # cache.get_many(keys, version=None)
+    # cache,touch(key, timeout=DEFAULT_TIMEOUT, version=None)
+    # cache.has_key(key, version=None)
+    # cache.add(key, value, timeout=None, version=None) if "key not exist" then only add
