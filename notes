@@ -65,7 +65,9 @@ pass: learndjango
 15. MVT
 16. django templates
 17. depth dive in templates
-18. import style, js, img
+18. import time
+
+import style, js, img
 19. inheritance or extends
 20. inheritence with static files
 21. boostrap
@@ -638,6 +640,7 @@ class StudentRegistrationForm(forms.Form):
     # - Do make and migrate then python manege.py createcachetable
 
 
+
 # 59. perticular view cache:
 
 
@@ -697,7 +700,8 @@ class StudentRegistrationForm(forms.Form):
     # </body>
     # </html>
 
-# 61. Low level caching
+# 61.Low level caching
+
 
     # - perticular object targeted: list, tuple, dict, set
 
@@ -962,5 +966,283 @@ class StudentRegistrationForm(forms.Form):
 #             return render(request, 'blog/exception.html', {'msg': e, 'class_name': e.__class__.__name__})
 
 #         return self.get_response(request)
+
+# ============================================================================================
+
+# 66. qdatabase returning queryset
+
+    from .models import student, teacher
+
+    all_data = student.objects.all()
+    filter_data = student.objects.filter(name='akash').delete()
+    filter_with_multiple_data = student.objects.filter(name='akash', email='GmzXw@example.com').delete()
+    filter_with_or_data = student.objects.filter(Q(name='akash') | Q(email='GmzXw@example.com')).delete()
+    exclude_data = student.objects.exclude(name='akash')
+    exclude_data = student.objects.filter(name='akash').update(name='rohan')
+    order_by_data = student.objects.order_by('name')
+    order_by_data = student.objects.order_by('name').reverse()
+    order_BY_random_data = student.objects.order_by('?')
+    order_by_desc_data = student.objects.order_by('-name')
+    order_by_desc_data = student.objects.order_by('-name')
+    get_first_data = student.objects.first()
+    order_by_data = student.objects.order_by('name')[:2]
+
+
+
+    all_data = student.object.value()
+    all_data = student.object.value('id', 'name', 'email')
+    all_data = student.object.value_list('id', 'name', 'email') # return tuple
+
+    st = student.objects.all()
+    tch = teacher.objects.all()
+    union = st.union(tch)
+    union = st.union(tch , all=True) # duplicatwe also include
+    intersection = st.intersection(tch) # common
+
+    difference = st.difference(tch) # st - tch
+    print(f"sql query: {all_data.query}")
+    print(f"sql query: {filter_data.query}")
+    print(f"sql query: {exclude_data.query}")
+    print(f"sql query: {order_by_data.query}")
+    print(f"sql query: {order_by_data.query}")
+    print(f"sql query: {order_BY_random_data.query}")
+    print(f"sql query: {order_by_desc_data.query}")
+    print(f"sql query: {order_by_desc_data.query}")
+
+
+# 67. qdatabase NOT returning queryset
+
+    get_data = student.objects.get(id=1)
+    get_data = student.objects.get(name="akash")
+    get_data = student.objects.get(email="GmzXw@example.com")
+
+    std_data = student.object.order_by('name').first()
+    std_data = student.object.order_by('name').last()
+
+    # it's take latest and earliest data by default and it's return queryset | if there many data then it's return first
+    std_data = student.object.latest('name', 'id') # order_by = id
+    std_data = student.object.earliest('id') # first entry will shown
+
+    is_exist = student.objects.filter(id=1).exists()
+    is_exist = student.objects.filter(name="akash").exists()
+    is_exist = student.objects.filter(email="GmzXw@example.com").exists()
+
+    count = student.objects.count()
+    count = student.objects.filter(name="akash").count()
+    count = student.objects.filter(email="GmzXw@example.com").count()
+
+    st_data = student.objects.create(name="akash", email="GmzXw@example.com")
+    st_data = student.objects.create(name="akash", email="GmzXw@example.com", password="123456")
+
+
+    st_data = student.objects.filter(name="akash").update(name="rohan")
+    st_data = student.objects.exclude(name="akash").filter(email="GmzXw@example.com").update(name="rohan").delete()
+
+
+    st_data = student.objects.get_or_create(name="akash", email="GmzXw@example.com")
+    st_data = student.objects.update_or_create(name="akash", email="GmzXw@example.com", password="123456", defaults={'name': 'rohan'})
+
+    obj = [
+        student(name="akash", email="GmzXw@example.com", password="123456"),
+        student(name="rohan", email="GmzXw@example.com", password="123456"),
+    ]
+    st_data = student.objects.bulk_create(obj)
+
+    all_data = student.objects.all()
+    for i in all_data:
+        st.city = 'Mumbai'
+
+    st_data = student.objects.bulk_update(all_data, ['city'])
+    st_data = student.objects.in_bulk([1, 2, 3, 4, 5, 6, 7, 8, 9, 10])
+
+    st = student.objects.get(id=1)
+    st.delete()
+
+    st = student.objects.filter(id=1)
+    st.delete()
+
+    st = student.objects.filter(id=1).delete()
+    student.objects.filter(name="akash").count()
+# ============================================================================================
+#  68. Field lookups
+
+
+    st = student.objects.filter(name__exact='sonam')
+    st = student.objects.filter(name__iexact='sonam') # non casesemsitive
+    st = student.objects.filter(name__contains='a')
+    st = student.objects.filter(name__icontains='a')
+
+    st = student.objects.filter(id__in=[1, 2, 3])
+    st = student.objects.filter(marsk__gt=92)
+    st = student.objects.filter(marsk__gte=92)
+    st = student.objects.filter(marsk__lt=92)
+    st = student.objects.filter(marsk__lte=92)
+
+    st = student.objects.filter(name__startswith='a')
+    st = student.objects.filter(name__endswith='a')
+
+    st = student.objects.filter(pass_date__range=['2022-01-01', '2022-12-31'])
+    st = student.objects.filter(adminssiondate__date = (2026, 4, 6))
+
+    st = student.objects.filter(adminssiondate__date_gt = (2026, 4, 6))
+    st = student.objects.filter(adminssiondate__date_year = 2026)
+    st = student.objects.filter(adminssiondate__date_month = 5)
+    st = student.objects.filter(adminssiondate__date_day_lt = 5)
+    st = student.objects.filter(adminssiondate__date_week = 47)
+    st = student.objects.filter(adminssiondate__date_week_day = 5)
+    st = student.objects.filter(adminssiondate__date_time__gt = time(18,00))
+
+# ============================================================================================
+
+# 69. agreegate function
+
+    from django.db.models import Avg, Sum, Min, Max, Count
+
+    st = student.object.all(
+        student.objects.aggregate(Avg('marsk')),
+        student.objects.aggregate(Sum('marsk')),
+        student.objects.aggregate(Min('marsk')),
+        student.objects.aggregate(Max('marsk')),
+        student.objects.aggregate(Count('marsk')),
+    )
+
+# 70. Q objects
+
+    from django.db.models import Q
+
+    st = student.objects.filter(Q(name="rohan") | Q(name="akash"))
+    st = student.objects.filter(Q(name="rohan") & Q(name="akash"))
+    st = student.objects.filter(Q(name="rohan") ^ Q(name="akash"))
+
+    st = student.objects.filter(~Q(name="rohan"))
+
+
+# 71. Limit queryset
+
+    st = student.objects.all()[:5]
+    st = student.objects.all()[5:10:2]
+    st = student.objects.all()[5:]
+
+# 72. model inheritance
+
+from django.db import models
+
+# abstract model
+class basemodel(models.Model):
+  created_at = models.DateTimeField(auto_now_add=True)
+  updated_at = models.DateTimeField(auto_now=True)
+  name = models.CharField(max_length=100, blank=True, null=True)
+
+  class Meta:
+    abstract = True
+
+class customer(basemodel):
+  def __str__(self):
+    return self.name
+
+class seller(basemodel):
+
+  account_open_date = models.DateField(blank=False, null=False, help_text='Account open date')
+  def __str__(self):
+    return self.name
+
+class admin(basemodel):
+  name = None
+  def __str__(self):
+    return self.name
+
+
+
+
+  # model inheritence
+class Examcenter(models.Model):
+    center_name = models.CharField(max_length=100)
+    location = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.name
+
+class candidate(Examcenter):
+    name = models.CharField(max_length=100)
+    roll_no = models.IntegerField(blank=False, null=False)
+
+    def __str__(self):
+        return self.name
+
+
+
+
+# proxy model
+class product(models.Model):
+  name = models.CharField(max_length=100)
+  price = models.DecimalField(max_digits=10, decimal_places=2)
+  def __str__(self):
+    return self.name
+
+class productproxy(product):
+  class Meta:
+    proxy = True
+    ordering = ['name']
+
+# - add this 2 model in migrations and admin...
+
+
+# 73. Model manager
+
+
+# class CustomStudentManager(models.Manager):
+#   def get_queryset(self):
+#     return super().get_queryset().order_by('name')
+
+
+
+# If you want to create a custom method in manager
+class CustomStudentManager(models.Manager):
+  def get_queryset(self):
+    return super().get_queryset().order_by('name')
+
+  def passout(self):
+    return self.get_queryset().filter(marks__gt=50)
+
+
+class student(models.Model):
+  name = models.CharField(max_length=100)
+  city = models.CharField(max_length=100)
+  marks = models.IntegerField(blank=False, null=False)
+  roll = models.IntegerField(blank=False, null=False)
+
+  # students = models.Manager()
+  # passout = models.Manager()
+  objects = CustomStudentManager()
+
+  def __str__(self):
+    return self.name
+
+
+# in view
+def index(request):
+  st = student.students.all()
+  st = student.objects.passout()
+  return render(request, 'index.html', {'st': st})
+
+
+# ============================================================================================
+
+# 74. Model relationships
+
+# 1. One to One
+# 2. One to Many
+# 3. Many to Many
+
+
+
+
+
+
+# ============================================================================================
+
+
+# ============================================================================================
+
 
 # ============================================================================================
