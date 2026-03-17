@@ -65,7 +65,9 @@ pass: learndjango
 15. MVT
 16. django templates
 17. depth dive in templates
-18. import time
+18. import asyncio
+import inspect
+import time
 
 import style, js, img
 19. inheritance or extends
@@ -1423,6 +1425,8 @@ def cart_items(request):
 
     # - uvicorn project_name.asgi:application --reload --port 8000 | command to run
     # - django ORM doesn't fully support asyncronous view, we can use 3rd party library : tortoise-orm
+    # - if you're using ASGI then you CSS will not work properly, to resolve this : add static files in settings.py and add in urlspatterns
+
 
     # import asyncio
     # import time
@@ -1480,3 +1484,156 @@ def cart_items(request):
     #       "time taken": time.time() - start
     #     }
     #   )
+
+# 82. sync to async and async to sync
+
+    # from django.shortcuts import render
+    # from asgiref.sync import sync_to_async, async_to_sync
+
+    # # sync to async
+    # # def callll(x):
+    # #   return x**2
+
+    # # async def callll(request):
+    # #     res = await sync_to_async(callll)(2)
+    # #     return res
+
+
+    # # async to sync
+    # async def callll(x):
+    #   return x**2
+
+    # def callll(request):
+    #     res = async_to_sync(callll)(2)
+    #     return res
+
+
+# 83. fix static files issue with ASGI server
+
+# import os
+# from django.core.asgi import get_asgi_application
+# from django.contrib.staticfiles.handlers import ASGIStaticFilesHandler
+
+# os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'ch45.settings')
+# application = ASGIStaticFilesHandler(get_asgi_application())
+
+
+# or
+
+
+# # add in settings.py
+
+# STATIC_URL = '/static/'
+# STATIC_ROOT  =  BASE_DIR / 'static'
+
+# # then add in urlspatterns
+
+# from django.conf import settings
+# from django.conf.urls.static import static
+
+# if settings.DEBUG:
+#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+# python manage.py collectstatic
+
+
+
+
+# 84. ASYNC ORM
+
+# aget()
+# acount()
+# afirst()
+# alast()
+# aexists()
+# acontains()
+# aorder_by()
+# afilter()
+# aexclude()
+# asave()
+# acreate()
+# aupdate()
+# adelete()
+
+async def demo(request):
+
+    async for student in profile.objects.all():
+        print(student.name)
+
+    await profile.objects.acreate(name="akash")
+    await profile.objects.afilter(name="akash").delete()
+    await profile.objects.aupdate(name="akash")
+
+    await profile.objects.aget(name="akash").delete()
+    await profile.objects.afilter(name="akash").delete()
+
+    dell = await profile.objects.aget(name="akash")
+    await dell.adelete()
+
+    return HttpResponse("hello")
+
+
+
+# 85. ASYNC middleware
+
+
+from django.utils.decorators import sync_and_async_middleware, sync_only_middleware, async_only_middleware
+
+
+
+# @sync_only_middleware - only sync middleware will execute, doesn't matter it's start with respective to sync or async
+
+# @aysnc_only_middleware - only async middleware will execute, doesn't matter it's start with respective to sync or async
+
+@sync_and_async_middleware
+def my_middleware(get_response):
+    print("one time initialization")
+
+    if inspect.iscoroutinefunction(get_response):
+        async def middleware(request):
+            print("Before View")
+            return await get_response(request)
+            print("After View")
+        return middleware
+    else:
+        def middleware(request):
+            print("Before View")
+            return get_response(request)
+            print("After View")
+        return middleware
+
+
+
+class AsyncMiddleware:
+
+    async_capable = True
+    sync_capable = False
+
+    def __init__(self, get_response):
+        print("one time initialization")
+        self.get_response = get_response
+        if inspect.iscoroutinefunction(self.get_response):
+            inspect.markcoroutinefunction(self)
+
+    async def __call__(self, request):
+        print("Before View")
+        response = await self.get_response(request)
+        print("After View")
+        print(f"request path is : {request.path}")
+        return response
+
+class AsyncMiddleware:
+
+    async_capable = False
+    sync_capable = True
+
+    def __init__(self, get_response):
+        print("one time initialization")
+        self.get_response = get_response
+
+    def __call__(self, request):
+        print("Before View")
+        response =  self.get_response(request)
+        print("After View")
+        print(f"request path is : {request.path}")
+        return response

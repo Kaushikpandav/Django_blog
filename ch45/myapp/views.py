@@ -54,3 +54,25 @@ async def async_view(request):
       "time taken": time.time() - start
     }
   )
+
+# ============================================================================================
+
+from django.shortcuts import render
+from asgiref.sync import sync_to_async, async_to_sync
+
+# sync to async
+# def callll(x):
+#   return x**2
+
+# async def callll(request):
+#     res = await sync_to_async(callll)(2)
+#     return res
+
+
+# async to sync
+async def callll(x):
+  return x**2
+
+def callll(request):
+    res = async_to_sync(callll)(2)
+    return res
