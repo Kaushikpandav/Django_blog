@@ -1359,4 +1359,60 @@ def index(request):
 # ============================================================================================
 
 
-# ============================================================================================
+# 78. context proccessor : it's a function that returns a dictionary and used to pass data to template for common value
+
+# built in context processor | check in settings.py
+    # - messages
+    # - debug
+    # - auth
+
+# custom : we need number product which was added in cart to app template page to fo this we use context processor..
+
+# create : context_processor,py
+
+def cart_items(request):
+   cart_items = 4
+   return {
+    'cart_items' : cart_items
+   }
+
+# add this def in setting : 'cart.context_proccesor.cart_items'
+
+============================================================================================
+
+# 79. async servert ASGI using daphne: while you developing the realtime app, like socket or asyncronous task, you can use ASGI
+
+# ASGI : Asynchronous Server Gateway Interface : Django, FastAPI, Uvicorn, hypercorn
+    # channel , daphne, celery
+# WSGI : Web Server Gateway Interface : Gunicorn, Django, Apache, Nginx, IIS,
+
+
+# - by default django uses WSGI
+# - to use ASGI we need to install daphne
+# - run command :
+    # daphn ch79.asgi:application
+    # daphne --port 8000 ch79.asgi:application
+
+# if you want to run asgi with : python manage.py runserver
+# then add daphne in settings.py in install app
+# &
+# add ASGI_APPLICATION = 'ch79.asgi.application'
+
+# 80. ASGI server using uvicorn:
+
+    # - pip install uvicorn
+    # - uvicorn ch79.asgi:application -- reload
+
+
+    # in any app create management/runuvicorn.py
+    # from django.core.management.base import BaseCommand
+    # import uviconrn
+
+    # class Command(BaseCommand):
+    #     help = 'run uvicorn'
+
+    #     def handle(self, *args, **options):
+    #         uvicorn.run('ch79.asgi:application', reload=True)
+
+
+    # - run command : python manage.py runuvicorn
