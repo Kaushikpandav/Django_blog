@@ -62,31 +62,68 @@ from django.contrib.auth.models import Group
 
 # 1. One to One:
 
-class profile(models.Model):
-  user = models.OneToOneField(User, on_delete=models.CASCADE) # if i delete user from User the both user and profile will be deleted But if user will delete from the profile then only profile will be deleted
+# class profile(models.Model):
+#   user = models.OneToOneField(User, on_delete=models.CASCADE) # if i delete user from User the both user and profile will be deleted But if user will delete from the profile then only profile will be deleted
 
-  user = models.OneToOneField(User, on_delete=models.PROTECT) # if i try to delete user from USer it will not getting delete untill and unless it hold profile...
+#   user = models.OneToOneField(User, on_delete=models.PROTECT) # if i try to delete user from USer it will not getting delete untill and unless it hold profile...
 
-  user = models.OneToOneField(User, on_delete=models.CASCADE, limit_choices_to={'is_staff': True}) # only is staff user can create profile
+#   user = models.OneToOneField(User, on_delete=models.CASCADE, limit_choices_to={'is_staff': True}) # only is staff user can create profile
 
-  user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
-  name = models.CharField(max_length=100)
-  email = models.EmailField(max_length=100)
-  city = models.CharField(max_length=100)
+#   user = models.OneToOneField(User, on_delete=models.DO_NOTHING)
+#   name = models.CharField(max_length=100)
+#   email = models.EmailField(max_length=100)
+#   city = models.CharField(max_length=100)
+#   def __str__(self):
+#     return self.name
+
+# class page(models.Model):
+#   user = models.OneToOneField(User, on_delete=models.CASCADE)
+#   page_name = models.CharField(max_length=100)
+#   def __str__(self):
+#     return self.name
+
+# class like(page):
+#   user = models.OneToOneField(page, on_delete=models.CASCADE, paresrent_link=True)
+#   likes = models.IntegerField()
+#   def __str__(self):
+#     return self.name
+
+
+
+# 2. many to one:
+
+class post(models.Model):
+  # user = models.ForeignKey(User, on_delete=models.CASCADE)
+  # user = models.ForeignKey(User, on_delete=models.PROTECTED)
+  user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True) # doesn't delete post if user is deleted , owner of post will be null
+  title = models.CharField(max_length=100)
+  content = models.TextField()
   def __str__(self):
-    return self.name
+    return self.title
 
-class page(models.Model):
-  user = models.OneToOneField(User, on_delete=models.CASCADE)
-  page_name = models.CharField(max_length=100)
-  def __str__(self):
-    return self.name
+# class comment(models.Model):
+#   post = models.ForeignKey(post, on_delete=models.CASCADE)
+#   user = models.ForeignKey(User, on_delete=models.CASCADE)
+#   comment = models.TextField()
+#   def __str__(self):
+#     return self.comment
 
-class like(page):
-  user = models.OneToOneField(page, on_delete=models.CASCADE, paresrent_link=True)
-  likes = models.IntegerField()
-  def __str__(self):
-    return self.name
 
-# 2. One to Many
-# 3. Many to Many
+
+# 3. Many to Many : saperate table will be created
+
+# class userprofile(models.Model):
+#   user = models.ForeignKey(User, on_delete=models.CASCADE)
+#   group = models.ForeignKey(Group, on_delete=models.CASCADE)
+#   def __str__(self):
+#     return self.user
+
+# class post(models.Model):
+#   user = models.ManyToManyField(User)
+#   title = models.CharField(max_length=100)
+#   content = models.TextField()
+#   def __str__(self):
+#     return self.title
+
+    # def writen_by(self):
+    #   return ', '.join([str(p) for p in self.user.all()])
