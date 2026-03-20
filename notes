@@ -1622,7 +1622,7 @@ class AsyncMiddleware:
         print(f"request path is : {request.path}")
         return response
 
-class AsyncMiddleware:
+class SyncMiddleware:
 
     async_capable = False
     sync_capable = True
@@ -1637,3 +1637,95 @@ class AsyncMiddleware:
         print("After View")
         print(f"request path is : {request.path}")
         return response
+
+# 86. class based view
+# 87. templateview
+# 89. redirectview
+
+    1) based class based view:
+        - view
+
+            from django.views import View
+            # class Testingview(View):
+            #     def get(self, request):
+            #         return HttpResponse("hello")
+
+            # path('test/', Testingview.as_view(), name='test'),
+
+
+            class Testingview(View):
+                def get(self, request):
+                    form = StudentRegistrationForm()
+                    return HttpResponse("hello")
+
+                def post(self, request):
+                    form = StudentRegistrationForm(request.POST)
+                    if form.is_valid():
+                        return HttpResponse("success")
+                    return HttpResponse("failled")
+
+                def put(self, request):
+                    return HttpResponse("hello")
+
+                def delete(self, request):
+                    return HttpResponse("hello")
+
+
+        # - TemplateView: it's render a template and inherit class : templateresponsemixin, contextmixin, view (most use in logout)
+
+            # from django.views.generic.base import TemplateView
+            # path('test/', TemplateView.as_view(template_name='test.html'), name='test'), # without view we can directly render a .html file
+
+            # class Testingview(TemplateView):
+            #   template_name = 'test.html'
+
+                # def get_context_data(self, **kwargs):
+                #     context = super().get_context_data(**kwargs)
+                #     context['name'] = "akash"
+                #     return context
+            # path('test/', Testingview.as_view(extra_context={'role':'user'}), name='test')
+
+        # - RedirectView : it's redirect to another url(most use in login)
+
+            from django.views.generic.base import RedirectView
+            path('test/', RedirectView.as_view(url='https://www.google.com'), name='test'),
+            path('test/', RedirectView.as_view(url='/'), name='test'),
+            path('test/', RedirectView.as_view(pattern_name='test')), # patten_name will see name of matching url path and redirect there..
+            path('profile/<int:pk>/', view.Testingview.as_view(pattern_name='test')),
+
+            # in view.py
+
+            class Testingview(RedirectView):
+                # url = 'https://www.google.com' or
+                # pattern_name = 'test' or
+                # url = '/'
+                # query_string = True # url with query string
+
+                def get_redirect_url(self, *args, **kwargs):
+                    kwargs['pk']==21
+                    return super().get_redirect_url(*args, **kwargs)
+            path('test/', Testingview.as_view(), name='test'),
+
+
+    # 90. book review system using class based view
+
+        # use all concept of template, redirect view and class based view
+
+
+    # 2) generic class based view : same work with less code
+
+        # - display view
+        #     - list view
+        #     - detail view
+        # - editing view
+        #         - create view
+        #         - update view
+        #         - delete view
+        # - date view
+                # - year view
+                # - month view
+                # - week view
+                # - day view
+
+
+        # - List view
