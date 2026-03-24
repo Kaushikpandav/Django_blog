@@ -1712,7 +1712,7 @@ class SyncMiddleware:
         # use all concept of template, redirect view and class based view
 
 
-    # 2) generic class based view : same work with less code
+    # 2) generic class based view : same work with less code |
 
         # - display view
         #     - list view
@@ -1728,4 +1728,239 @@ class SyncMiddleware:
                 # - day view
 
 
-        # - List view
+
+        # 1) display view :
+
+            # 1) List view:
+            # from django.views.generic.list import ListView
+
+
+            # # in view
+
+            #     class allStudentView(View):
+            #         def get(self, request):
+            #             data = profile.objects.all()
+            #             student = profile.objects.get(id=1)
+            #             return render(request, 'student/all_data.html', {'data': data, 'student': student})
+
+            #     class singleStudentView(ListView):
+            #         model = profile
+
+            #         template_name_suffix = '_dark' # if we want to change template name
+            #         ordering = ['-id'] # if we want to change order
+            #         template_name = 'student/single.html' # if we want to change template name, default is modelname_list.html
+            #         context_object_name = 'data' # with we can access data in template
+
+            #         # if we want to change queryset
+            #         def get_queryset(self):
+            #         return Student.objects.filter(id=self.kwargs['pk'])
+
+            #         # if we want to change context
+            #         def get_context_data(self, *args ,**kwargs):
+            #         ctx =  super().get_context_data(**kwargs)
+            #         ctx['student'] = profile.objects.get(id=self.kwargs['pk'])
+            #         return ctx
+
+            #         # if we want to  change conditionaly templates
+            #         def get_template_names(self):
+            #         if self.request.COOKIES.get('theme') == 'dark':
+            #             return ['student/all_data_dark.html']
+            #         else:
+            #             self.template_name = 'student/all_data.html'
+            #         return [self.template_name]
+
+
+            # # 2) Detail view:
+            # from django.views.generic.detail import DetailView
+
+            # path('single/<int:pk>/', singleStudentView.as_view(), name='single'),
+            # # in view
+
+            # class allStudentView(View):
+            #     def get(self, request, pk):
+            #         data = profile.objects.all()
+            #         student = profile.objects.get(id=1)
+            #         return render(request, 'student/all_data.html', {'data': data, 'student': student})
+
+            # # pk or slug is important for detail view
+            # class singleStudentView(DetailView):
+            #     model = profile
+            #     pk_url_kwarg = 'student_id' # if we want to change pk name to custom identity in path
+            #     template_name = 'student/single.html' # if we want to change template name
+            # \
+            #     context_object_name = 'data' # with we can access data in template
+
+            #     def get_context_data(self, *args ,**kwargs):
+            #         ctx =  super().get_context_data(**kwargs)
+            #         ctx['student'] = profile.objects.get(id=self.kwargs['student_id'])
+            #         return ctx
+
+
+        # 2) editing view : templatesresponse mixin, form mixin, baseformview , processform view
+
+
+
+
+
+            # 4) form view
+                from django.views.generic.edit import FormView
+                from .forms import ContactForm
+                from django.contribed import messages
+
+                path('success/', ContactFormView.as_view(), name='form'),
+                class ContactFormView(View):
+                    def get(self, request):
+                        form = ContactForm()
+                        return render(request, 'student/form.html', {'form': form})
+
+                    def post(self, request):
+                        form = ContactForm(request.POST)
+                        if form.is_valid():
+                            form.save()
+                            return redirect('home')
+                        return render(request, 'student/form.html', {'form': form})
+
+                class ContactForm(FormView):
+                    template_name = 'student/form.html'
+                    form_class = ContactForm
+                    success_url = '/success/' or 'form'
+                    initial = {'name': 'name...', 'email': 'email...'}
+
+                    def form_valid(self, form):
+                        name = form.cleaned_data['name']
+                        email = form.cleaned_data['email']
+                        student = Student(
+                            name = name,
+                            email = email,
+                        )
+                        student.save()
+                        return HttpResponseRedirect(self.success_url)
+
+                    def form_invalid(self, form):
+                        messages.error(self.request, 'Form is invalid')
+                        return super().form_valid(form)
+
+                    def get_context_data(self, **kwargs):
+                        ctx = super().get_context_data(**kwargs)
+                        ctx['form'] = ContactForm()
+                        return ctx
+
+            # 1) create view
+
+            from django.views.generic.edit import CreateView
+            from django.urls import reverse
+            from django import forms
+            from .forms import StudentRegistrationForm
+
+            path('create/', CreateView.as_view(), name='create'),
+            path('student_create/', StudentCreateView.as_view(), name='student_create'),
+
+            class CreateView(View):
+                def get(self, request):
+                    form = StudentRegistrationForm()
+                    return render(request, 'student/register.html', {'form': form})
+
+                def post(self, request):
+                    form = StudentRegistrationForm(request.POST)
+                    if form.is_valid():
+                        form.save()
+                        return redirect('home')
+                    return render(request, 'student/register.html', {'form': form})
+
+            class StudentCreateView(CreateView):
+                # model = Student  or form_class = StudentRegistrationForm
+                fields = ['name', 'email']
+                success_url = '/success/'
+                template_name = 'student/register.html'
+
+                # to change redirect url
+                def get_absolute_url(self):
+                    return reverse('student_create')
+
+                # to change form style
+                def get_form(self):
+                    form = super().get_form()
+                    form.fields['name'].widget.attrs.update({'class': 'form-control'})
+                    form.fields['email'].widget.attrs.update({'class': 'form-control'})
+
+                    form.field['password'].widget = form.PasswordInput(attrs={'class': 'form-control'})
+                    return form
+
+
+            # 2) update view:
+
+            from django.views.generic.edit import UpdateView
+            from django.shortcuts import render
+
+            path('update/<int:pk>', UpdateView.as_view(), name='update'),
+
+
+            # class UpdateView(View):
+            #     def get(self, request, pk):
+            #         student = Student.objects.get(id=pk)
+            #         form = StudentRegistrationForm(instance=student)
+            #         return render(request, 'student/update.html', {'form': form})
+
+            #     def post(self, request, pk):
+            #         student = Student.objects.get(id=pk)
+            #         form = StudentRegistrationForm(request.POST, instance=student)
+            #         if form.is_valid():
+            #             form.save()
+            #             return redirect('home')
+            #         return render(request, 'student/update.html', {'form': form})
+
+            #model base
+            # class UpdateVieew(UpdateView):
+            #     model = Student
+            #     fields = ['name', 'email']
+            #     template_name = 'student/update.html'
+            #     success_url = '/success/'
+
+            #     def get_context_data(self, **kwargs):
+            #         ctx = super().get_context_data(**kwargs)
+            #         ctx['student'] = Student.objects.get(id=self.kwargs['pk'])
+            #         return ctx
+
+            #     def get_form(self):
+            #         form = super().get_form()
+            #         form.fields['name'].widget =  form.TextInput(attrs={'class': 'form-control'})  # form.fields['name'].widget.attrs.update({'class': 'form-control'})
+            #         form.fields['email'].widget = form.EmailInput(attrs={'class': 'form-control'})  # form.fields['email'].widget.attrs.update({'class': 'form-control'})
+
+            #         form.field['password'].widget = form.PasswordInput(attrs={'class': 'form-control'})
+            #         return form
+
+            # formmodel view based
+            class UpdateVieew(UpdateView):
+                model = Student
+                form_class = StudentRegistrationForm
+                fields = ['name', 'email']
+                template_name = 'student/update.html'
+                success_url = '/success/'
+
+                def get_context_data(self, **kwargs):
+                    ctx = super().get_context_data(**kwargs)
+                    ctx['student'] = Student.objects.get(id=self.kwargs['pk'])
+                    return ctx
+
+
+            # 3) delete view:
+
+            from django.views.generic.edit import DeleteView
+
+            path('delete/<int:pk>', DeleteView.as_view(), name='delete'),
+
+            # class DeleteView(View):
+            #     def get(self, request, pk):
+            #         student = Student.objects.get(id=pk)
+            #         student.delete()
+            #         return redirect('home')
+
+            class DeleteView(DeleteView):
+                model = Student
+                success_url = '/success/'
+
+
+
+# 96. CRUD Operations using Genertics View | ch46
+# 97. Complete authentication using CBV | ch47
+# 98. restrict Role based access using CBV | ch48

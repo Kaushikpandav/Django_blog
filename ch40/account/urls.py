@@ -6,6 +6,7 @@ urlpatterns = [
   path('register/', register, name='register'),
   path('login/<int:uuid>/token/<str:token>/', activate, name='activate'),
   path('login/', login_view, name='login'),
+  path('activate/<str:uidb64>/<str:token>/', activate, name='activate'),
   path('password_reset_confirm/<uidb64>/<token>/', password_reset_confirm, name='password_reset_confirm'),
   path('logout/', LogoutView.as_view(), name='logout'),
 ]
