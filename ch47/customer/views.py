@@ -5,14 +5,15 @@ from django.contrib.auth.view import PasswordChangeView
 from django.contrib.auth import logout
 from django.views import View
 from django.contrib.auth.mixins import LoginRequiredMixin
+from account.mixin import IsCustomerMixin
 # Create your views here.
 
-class CustomeDashbordView(View, LoginRequiredMixin):
+class CustomeDashbordView(View, LoginRequiredMixin, IsCustomerMixin):
   def get(self, request):
     return render(request, 'customer/dashboard.html')
 
 
-class ChangePasswordChangeView(PasswordChangeView, LoginRequiredMixin):
+class ChangePasswordChangeView(PasswordChangeView, LoginRequiredMixin, IsCustomerMixin):
   template_name = 'customer/changepassword.html'
   success_url = '/Login/'
 

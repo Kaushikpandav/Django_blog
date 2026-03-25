@@ -15,6 +15,8 @@ from django import messages, views
 from .utils import send_activation_email
 from djnago.contrib.auth import authenticate, login
 
+
+# this mixin secure view by proteting with loging and fore role based APi we use : from djnago.contrib.auth.mixins import UserPassesTestMixin
 from django.contrib.auth.mixins import LoginRequiredMixin
 # to redirect this loginrequire to out actually login page we need to do this in settings.py :
 # LOGIN_URL = 'login'

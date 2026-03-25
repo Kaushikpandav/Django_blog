@@ -1577,7 +1577,7 @@ async def demo(request):
 # 85. ASYNC middleware
 
 
-from django.utils.decorators import sync_and_async_middleware, sync_only_middleware, async_only_middleware
+rom django.utils.decorators import method_decorator, sync_and_async_middleware, sync_only_middleware, async_only_middleware
 
 
 
@@ -1962,5 +1962,607 @@ class SyncMiddleware:
 
 
 # 96. CRUD Operations using Genertics View | ch46
+
 # 97. Complete authentication using CBV | ch47
-# 98. restrict Role based access using CBV | ch48
+# 98. restrict Role based access using CBV | ch48 (APi secure) for FBV check | ch40
+# 99. role based registration using CBV | ch49
+# 100. decorators method in CBV
+
+    # this will protect this view with login and role based access
+
+    # 1)  class CustomeDashbordView(View, LoginRequiredMixin, IsCustomerMixin):
+        #   def get(self, request):
+        #     return render(request, 'customer/dashboard.html')
+
+
+    # 2)
+    #     from django.contrib.auth.decorators import login_required
+    #     path('dashboard/',login_required(CustomeDashbordView.as_view()), CustomeDashbordView.as_view(), name='dashboard'),
+
+    # 3)
+
+    #     from django.contrib.auth.decorators import login_required
+
+    #     @login_required
+    #     def dashboard(request):
+    #         return render(request, 'customer/dashboard.html')
+
+    #     class CustomeDashbordView(View):
+
+    #         @method_decorator(login_required)
+    #         def get(self, request):
+    #             return render(request, 'customer/dashboard.html')
+
+    # 4)
+    #     from django.contrib.auth.decorators import login_required
+
+    #     @method_decorator([login_required, IsCustomerMixin, permission_required('customer.is_customer')])
+    #     class CustomeDashbordView(View, IsCustomerMixin):
+    #         def get(self, request):
+    #             return render(request, 'customer/dashboard.html')
+
+    # 5) there is lot more decorators available:
+    #     example:
+    #         - login_required
+    #         - user_passes_test
+    #         - permission_required
+    #         - staff_member_required
+    #         - login_required_redirect
+    #         - user_passes_test_redirect
+    #         - permission_required_redirect etc...
+
+
+# 101. Built in Authentication:
+
+    # - if you use built in authentication then you need to use built in user as well not any custom user model..
+
+    # - also need to set 'accounts' rather than 'account'
+
+    # urlpatten = [
+    #     path('accounts/', include('django.contrib.auth.urls')),
+    # ]
+
+    # - you now able to use all fucntionalitie of built in view of authentication. you can change template and view according to your need
+
+# 102. Aysncronous CBV:
+
+    - pip install uvicorn httpx
+
+    # all methods in class must be async only
+    # class Home(views.APIView):
+    #     async def get(self, request):
+    #         return render(request, 'blog/home.html')
+
+    # - uvicorn projectname.asgi:application --reload
+
+# 103. Loginrequiremiddleware in Django 5
+
+    # - built in-my_middleware
+
+    - "django.contrib.auth.middleware.LoginRequiredMiddleware",
+
+        # - this will not allow user to access any page without login , but some of page need access without login..
+
+    from django.contrib.auth.decorators import login_not_required
+
+    @login_not_required
+    def home(request):
+        return render(request, 'blog/home.html')
+
+    @method_decorator(login_not_required, name='dispatch')
+    class Home(View):
+        def get(self, request):
+            return render(request, 'blog/home.html')
+
+# 104. namespace
+
+    # - we can create group of url pattens
+
+    # 1) application:
+    # 2) instance
+
+    # app_name  = "customer"
+
+    # urlpatten = [
+    #     path('account/', Register.as_view(), name='register'),
+    #     path('profile/', Profile.as_view(), name='profile'),
+    #     path('login/', Login.as_view(), name='login'),
+    #     path('logout/', Logout.as_view(), name='logout'),
+    # ]
+
+    # # OR
+
+    # urlpatten = [
+    #     path('account/', include('customer.urls', namespace='v1')),
+    #     path('account/', include('customer.urls', namespace='v2')),
+    # ]
+
+    # # then callling url will be:
+
+    #     {% url 'customer:register' %}
+    #     {% url 'customer:profile' %}
+    #     {% url 'customer:login' %}
+    #     {% url 'customer:logout' %}
+
+# 105. reverse & reverse_lazy
+
+    # from django.urls import reverse, reverse_lazy
+
+    # def home(request):
+    #     url = reverse('product/detail', args=[1])
+    #     return redirect(url)
+
+    # class Home(View):
+    #     def get(self, request):
+    #         url = reverse_lazy('product/detail', args=[1])
+    #         return redirect(url)
+
+    # class PostView(View):
+    #     def get(self, request, *args, **kwargs):
+    #         url = reverse('product:detail', kwargs={'pk': kwargs['pk']})
+    #         return redirect(url)
+
+
+    # - difference between the reverse and reverse_lazy is :
+
+    #     - reverse will use in function base becasue it's not need to success url
+    #     - reverse_lazy will in class base because it's need to success url then only it will work...
+
+
+# 106. JsonResponse
+
+    # from django.http import JsonResponse
+    # def my_view(request):
+    #     data = {
+    #         "name": "John",
+    #         "age": 30
+    #     }
+    #     return JsonResponse(data, status=200)
+
+    # def my_view(request):
+    #     data = ['name', 'age', 'city']
+    #     return JsonResponse(data, safe=False)
+
+    # def my_view(request):
+    #     data = ['name', 'age', 'city']
+    #     res = JsonResponse(data, safe=False)
+    #     res['X-header'] = 'value'
+    #     return res
+
+    # def products(request):
+    #    pd = Product.objects.all()
+    #    data = serializers.serialize('json', pd)
+    #    return JsonResponse(data)
+
+    # def show(request, id):
+    #     pd = list(Product.objects.values('id', 'name', 'price').filter(id=id))
+
+    #     return JsonResponse(data, safe=False)
+
+# 107. Django based REST API
+# 108. Annotate:
+
+    # from django.db.models import F
+    # from django.db.models import Sum, Max, Min, Avg, Count
+
+    # from django.db.models import Q
+    # from django.db.models import Exists, OuterRef
+
+    # def my_view(request):
+    #     qs = Product.objects.annotate(
+    #         total=Sum('price'),
+    #         max_price=Max('price'),
+    #         min_price=Min('price'),
+    #         avg_price=Avg('price'),
+    #         count=Count('price'),
+    #     )
+    #     number_of_authors = Author.objects.annotate(
+    #         total=Sum('books__price'),
+    #         max_price=Max('books__price'),
+    #         min_price=Min('books__price'),
+    #         avg_price=Avg('books__price'),
+    #         count=Count('books'),
+    #     )
+    #     books = Book.objects.annotate(
+    #         final_price=F('price') - 10%,
+    #     )
+
+    #     auther = Author.objects.annotate(
+    #         morethen_10_books= Count('books', filter=Q(books__status='Published'))
+    #     ).filter(morethen_10_books__gt=10)
+
+    #     authors = Author.objects.annotate(
+    #         published_books_count=Count('books', filter=Q(books__status='Published'))
+    #     )
+
+
+    #     return JsonResponse(list(qs), safe=False)
+
+# 109. select_related & prefetch_related
+
+    class Author(models.Model):
+        name = models.CharField(max_length=255)
+
+
+    class Book(models.Model):
+        auther = models.ForeignKey(Author, on_delete=models.CASCADE, related_name='books')
+        title = models.CharField(max_length=255)
+        status = models.CharField(max_length=255)\
+        price = models.IntegerField()
+        discount = models.IntegerField()
+
+    class tags (models.Model):
+        name = models.CharField(max_length=255)
+        book = models.ManyToManyField(Book, related_name='tags')
+
+    # 1) select_related : onetoone , Manytoone
+
+        # Feature	Book.objects.all()	select_related('auther')
+        # SQL Action	Simple SELECT	SELECT with INNER JOIN
+        # Database Hits	1 (for books) + N (for each author)	Exactly 1
+        # When to use	Never for ForeignKeys in a loop	Always when accessing FK data in a loop
+
+
+    # def my_view(request):
+    #     # total 13 query
+    #     qs = Book.objects.all()
+    #     # for book in qs:
+    #     #     print(book.auther)
+
+    #     # only one query
+    #     qs = Book.objects.select_related('auther').all()
+
+    #     return JsonResponse(list(qs), safe=False)
+
+
+    # 2) prefetch_related : onetomany , manytomany
+
+        # Feature	Book.objects.all()	prefetch_related('tags')
+        # SQL Action	Simple SELECT	SELECT with INNER JOIN
+        # Database Hits	1 (for books) + N (for each tag)	Exactly 1
+
+
+        # def my_view(request):
+        #     # total 13 query
+        #     qs = Book.objects.all()
+        #     for book in qs:
+        #         print(book.auther)
+        #         for tag in book.tags.all():
+        #             print(tag.name)
+
+        #     # only one query
+        #     qs = Book.objects.prefetch_related('tags').all()
+
+        #     return JsonResponse(list(qs), safe=False)
+
+
+# 110. pagination Function based view
+
+
+def postlist(request):
+    posts = Post.objects.all()
+    paginator = Paginator(posts, per_page=2, orphans=1)
+    page = request.GET.get('page')
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    return render(request, 'blog/home.html', {'posts': posts})
+
+
+# 111. class based pagination
+
+# class paginationView(ListView):
+#     model = Post
+#     template_name = 'blog/home.html'
+#     context_object_name = 'posts'
+#     ordering = ['-published_at']
+#     paginate_by = 2
+#     paginate_orphens = 3
+
+#     def get_context_data(self, **kwargs):
+#         try:
+#             return super(paginationView, self).get_context_data(**kwargs)
+#         except Http404:
+#             self.kwargs['page'] = 1
+#             return super(paginationView, self).get_context_data(**kwargs)
+
+#     def pagiinate_queryset(self, queryset, page_size):
+#         try:
+#             return super(paginationView, self).paginate_queryset(queryset, page_size)
+#         except Http404:
+#             self.kwargs['page'] = 1
+#             return super(paginationView, self).paginate_queryset(queryset, page_size)
+
+# class paginationView(View):
+#     def get(self, request):
+#         posts = Post.objects.all().order_by('-published_at')
+#         paginator = Paginator(posts, per_page=2, orphans=1)
+#         page = request.GET.get('page')
+#         try:
+#             posts = paginator.page(page)
+#         except PageNotAnInteger:
+#             posts = paginator.page(1)
+#         except EmptyPage:
+#             posts = paginator.page(paginator.num_pages)
+#         return render(request, 'blog/home.html', {'posts': posts})
+
+
+# 112. logging: | 48
+
+    from django.messages import get_messages
+
+    # messages.add_message(request, messages.SUCCESS,'This is a success message')
+    # messages.add_message(request, messages.INFO,'This is an info message')
+    # messages.add_message(request, messages.WARNING,'This is a warning message')
+    # messages.add_message(request, messages.ERROR,'This is an error message')
+
+    # messages.success(request, 'This is a success message')
+    # messages.info(request, 'This is an info message')
+    # messages.warning(request, 'This is a warning message')
+    # messages.error(request, 'This is an error message')
+
+    # to print aor display
+    # print(messages.get_level(request))
+    # print(messages.set_level(request, messages.DEBUG))
+
+    # logging.basicConfig(filename='example.log', level=logging.INFO)
+    # logging.info('This is an info message')
+    # logging.warning('This is a warning message')
+    # logging.error('This is an error message')
+
+
+    ===========================================================================================
+
+    ===========================================================================================
+
+
+    LOGGING = {
+    'version':1,
+    'disble_existing_loggers':False, # becasuse  it's extending the existing logger
+    'formatters':{
+        'standard':{
+        'format':'{levelname} - {asctime} - {message}- {name}-{lineno}- {asctime}- {pathname}- {module}- {funcName}- {filename}- {message}- {process}- {thread}- {threadName}',
+        'style':'{',
+        }
+        # 'simple':{
+        #   'format':'{levelname} - {asctime} - {message}- {name}-{lineno}- {asctime}- {pathname}- ',
+        #   'style':'{',
+        # },
+        # 'standard':{
+        #   'format':'%(levelname) - %(asctime) - %(message)- %(name)- %(lineno)- %(asctime)- %(pathname)- %(module)- %(funcName)- %(filename)- %(message)- %(process)- %(thread)- %(threadName)',
+        # 'style':'%',
+        # 'style':'&',
+    },
+    'handlers':{
+        'file':{
+        'level':'DEBUG',
+        'class':'logging.FileHandler',
+        'filename':BASE_DIR / 'logs/log.log', # need create a logs folder in ch48 folder
+        'formatter':'standard',
+        },
+        'console':{
+        'level':'DEBUG',
+        'class':'logging.StreamHandler',
+        'filename':BASE_DIR / 'logs/regular.log', # need create a logs folder in ch48 folder
+        'formatter':'simple',
+        },
+        'rotatingfile':{
+            'level':'DEBUG',
+            'class':'logging.handlers.RotatingFileHandler',
+            'filename':BASE_DIR / 'logs/log.log', # need create a logs folder in ch48 folder
+            'max_bytes':1024*1024*100, # 100 MB
+            'backup_count':3,
+            'formatter':'simple',
+        },
+        'timebasedfilerotating':{
+            'level':'DEBUG',
+            'class':'logging.handlers.TimedRotatingFileHandler',
+            'filename':BASE_DIR / 'logs/log.log', # need create a logs folder in ch48 folder
+            'when':'midnight', # it will create a new log file at midnight
+            'interval':1, # it will create a new log file every day
+            'backup_count':7, # it will keep 7 log files
+            'formatter':'simple',
+        },
+    },
+    'loggers':{
+        '':{ # default logger : when logger = logging.getLogger(__name__)
+        'handlers':['console'],
+        'level':'DEBUG',
+        'propagate':False, # it's not propagate to other loggers
+        },
+
+        'user':{
+        'handlers':['console'],
+        'level':'DEBUG',
+        },
+    }
+    }
+
+    # in view
+
+    import logging
+    # logger = logging.getLogger(__name__)
+    logger = logging.getLogger('user')
+
+    class someview(View):
+        def get(self, request):
+            logger.debug('This is a debug message')
+            logger.info('This is an info message')
+            logger.warning('This is a warning message')
+            logger.error('This is an error message')
+            logger.critical('This is a critical message')
+            return HttpResponse('Hello')
+
+    ===========================================================================================
+
+# 113. Multiple database | 48
+
+
+    # DATABASES = {
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.sqlite3',
+    #         'NAME': BASE_DIR / 'db.sqlite3',
+    #     },
+    #     'blog_postgres' :{
+    #         'ENGINE': 'django.db.backends.postgresql',
+    #         'NAME': 'postgres',
+    #         'USER': 'postgres',
+    #         'PASSWORD': 'postgres',
+    #         'HOST': 'localhost',
+    #         'PORT': '5432',
+    #     }
+    # }
+
+    DATABASE_ROUTERS = ['Projectname.Filename.Classname']
+
+    #- need to create a router for DB
+
+    # db_router.py
+
+    from django.db import router
+
+
+    class BlogDBRouter:
+        app_name = ['blog_postgres']
+        models_to_route = ['post', 'category']
+
+        def db_for_read(self, model, **hints):
+            if model._meta.app_label in self.app_name and model.__name__ in self.models_to_route:
+                return 'blog_postgres'
+            return None
+
+        def db_for_write(self, model, **hints):
+            if model._meta.app_label in self.app_name and model.__name__ in self.models_to_route:
+                return 'blog_postgres'
+            return None
+
+        def allow_relation(self, obj1, obj2, **hints):
+            if obj1._meta.app_label in self.app_name and obj2._meta.app_label in self.app_name:
+                return True
+            return None
+
+        def allow_migrate(self, db, app_label, model_name=None, **hints):
+            if app_label in self.app_name and model_name in self.models_to_route:
+                return db == 'blog_postgres'
+            return None
+
+    - python manage.py migrate
+    - python manage.py migrate --database=blog_postgres
+
+    ===========================================================================================
+
+# 114. Usefull commands
+
+    # python manage.py makemigrations
+    # python manage.py migrate
+    # python manage.py showmigrations
+    # python manage.py createsuperuser
+    # python manage.py changepassword username
+
+    # python manage.py runserver
+    # python manage.py runserver 8080
+    # python manage.py runserver 127.0.0.1:8000
+    # python manage.py runserver 0.0.0.0:8000
+    # python manage.py shell
+
+    # issue
+    # python manage.py check
+
+    #query
+    # python manage.py sqlmigrate
+    # python manage.py sqlmigrate blog 0001_initial
+
+    # python manage.py flush : remove all data from database , keep schema
+
+    # python manage.py colectstatic
+    # python manage.py test
+    # python manage.py dumpdata  appname.modelname # dump data from database to json file
+    # python manage.py sqlflush # remove all data from database
+    # python manage.py inspectdb
+    # python manage.py inspectdb > models.py
+    # python manage.py inspectdb appname_modelname > models.py # dump data from database to python file
+
+    # python manage.py --help
+
+
+# 115. django extension : it's a package
+    # pip install django-extensions
+
+    # - add in installed apps
+    # INSTALLED_APPS = [
+    #     ...
+    #     'django_extensions',
+    # ]
+
+    #  python manage.py  --help
+    # python manage.py admin_generator --help
+
+    extension commands:
+    # ython manage.py admin_generator appname # it will give admin panel code of all model
+    # clean_pyc
+    # clear_cache
+    # create
+    # runserver_plus
+    # python manage.py shell_plus
+    # python manage.py shell_plus --ipython
+    # python manage.py shell_plus --ipython --notebook
+    # python manage.py graph_models blog -o graph.png # it will give graph of all model
+
+    # python manage.py show_urls
+    # python manage.py show_urls blog
+    # python manage.py show_urls blog --format json
+    # python manage.py find_template home.html
+    # python manage.py reset_db
+
+# 116. Fake data insert
+
+    # python manage.py faker
+
+    # python manage.py shell
+        # from faker import Faker
+        # from .model import post
+
+        # faker = Faker('en_US')
+        # for i in rnage(100):
+        #     post.object.create(title=faker.name(), content=faker.text())
+
+
+        # faker.name()
+        # faker.text()
+        # faker.random_int(min=1, max=100)
+        # faker.random_int(min=1, max=100, step=5)
+        # faker.random_int(min=1, max=100, step=5, negative=False)
+
+        # a lot and wast variety of data available
+
+# 117. Debug toolbar
+
+    # pip install django-debug-toolbar
+
+    # add in installed apps
+    # INSTALLED_APPS = [
+    #     ...
+    #     'debug_toolbar',
+    # ]
+
+    # add in middleware
+    # MIDDLEWARE = [
+    #     ...
+    #     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    # ]
+
+    # add in settings
+    # INTERNAL_IPS = [
+    #     ...
+    #     '127.0.0.1',
+    # ]
+
+    # in urls.py
+    # urlpatterns = [
+    #     ...
+    # ] + bebug_toolbar.urls
+
+    # python manage.py runserver # it will show debug toolbar
