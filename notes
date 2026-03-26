@@ -2566,3 +2566,137 @@ def postlist(request):
     # ] + bebug_toolbar.urls
 
     # python manage.py runserver # it will show debug toolbar
+
+# 118. Django silk : it's use for profiling, mean how much time it take
+
+    # pip install django-silk
+
+    # add in installed apps
+    # INSTALLED_APPS = [
+    #     ...
+    #     'silk',
+    # ]
+
+    # add in middleware
+    # MIDDLEWARE = [
+    #     ...
+    #     'silk.middleware.SilkyMiddleware',
+    # ]
+
+    # in urls.py
+    urlpatten = [
+
+    ]
+    urlpatten += [path('silk/', include('silk.urls', namespace='silk'))]
+    python manage.py migrate
+    python manage.py collectstatic
+
+    # python manage.py runserver :  and go to /silk/...
+
+# 119. Silk on production
+
+    # pip install django-silk
+    # add in installed apps
+    # INSTALLED_APPS = [
+    #     ...
+    #     'silk',
+    # ]
+
+    # add in middleware
+    # MIDDLEWARE = [
+    #     ...
+    #     'silk.middleware.SilkyMiddleware',
+    # ]
+
+    # in settings.py
+    # if using multiple DB
+
+    DATABASE = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        },
+        'silk': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'silk_db.sqlite3',
+        },
+    }
+
+    # SILKY_STORAGE_ENGINIE = 'silk.backends.storage.SilkDatabaseStorage' # it's for single DB
+    # DATABASE_ROUTING = ['project_name.db_routers.SilkyDatabaseRouter'] # it's for multiple DB
+    # SILK_AUTHENTICATION = True # only login user can use silk
+    # LOGIN_URL = '/login' # it's redirect to login..
+    # SIlK_AUTHERIZATION = True # only is_staff user can use silk
+    SILK_PERMISSION = lambda:user: user.is_superuser # only for superuser access
+    SILK_IGNORE_PATH = ['/contact/'] # to ignore path
+
+    # ignore allpath start from admin
+    SILK_INTECEPT_FUNC = lambda request: not(
+        request.path.startswith('/admin/') or
+        request.path.startswith('/static/')
+    )
+
+    SILK_META = True # it will show meta data
+    SILK_MAX_REQUEST_BODY_SIZE = 1024 #1kb,  it will show request body size
+    SILK_MAX_RESPONSE_BODY_SIZE = 1024 #1kb,  it will show response body size
+
+    # in urls.py
+    # urlpatten = [
+
+    # ]
+    # urlpatten += [path('silk/', include('silk.urls', namespace='silk'))]
+
+
+    # - to routes DB create file : db_routers.py
+
+    class SilkyDatabaseRouter:
+        def db_for_read(self, model, **hints):
+            if model._meta.app_label == 'silk':
+                return 'silk'
+            return None
+
+        def db_for_write(self, model, **hints):
+            if model._meta.app_label == 'silk':
+                return 'silk'
+            return None
+
+        def allow_relation(self, obj1, obj2, **hints):
+            if obj1._meta.app_label == 'silk' or obj2._meta.app_label == 'silk':
+                return True
+            return None
+
+        def allow_migrate_model(self, db, app_label, model_name=None, **hints):
+            if app_label == 'silk':
+                return db == 'silk'
+            return None
+
+
+
+    # pyhton manage.py makemigrations
+    # pyhton manage.py migrate
+
+================================
+
+# 120. Python Decouple : it's use for .env file
+
+    # pip install python-decouple
+
+    # create .env file
+
+    # in settings.py
+    # import decouple
+    # SECRET_KEY = decouple.config('SECRET_KEY', cast=str, default='...')
+    # DATABASES = {
+    #     'default': {
+    #         'ENGINE': 'django.db.backends.sqlite3',
+    #         'NAME': BASE_DIR / 'db.sqlite3',
+    #     }
+    # }
+
+# 121. what NEXT
+
+# - rest
+# - channel
+# - celery
+# - redis
+# - rabbitmq
