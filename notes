@@ -2700,3 +2700,47 @@ def postlist(request):
 # - celery
 # - redis
 # - rabbitmq
+
+
+
+===========================================================================
+
+
+# CELERY: it's use for async task and background task.
+
+    - asyncronous task : it's run in background
+    - background task : it's run in background
+    - file process and upload
+    - disctribution nad parallelism
+    - preriodic task
+
+    # pip install celery
+    # pip install django-celery-beat
+    # pip install django-celery-results
+    # pip install django-celery-email
+
+
+    # user send rq ==>>> application add in brocker - worker will process it and send back to user or DB.
+
+    # RUN (worker)
+    # celery -A Projectname worker -l info
+    # celery -A Projectname worker -l info --concurrency=4
+
+    # pools: it's a mechanism to limit the number of threads that can be used to process tasks in parallel.
+
+        # 1) prefork creates a new process for each worker, while eventlet creates a new green thread for each worker.
+
+        # 2) Thread : it's uses threads instead of seprate process. for concurrency control.'
+        # '
+        # 3) solo : it's a special poolthate runs a single worker process without any concurrency control.
+
+        # 4) Gevent : it's a mechanism to limit the number of threads that can be used to process tasks in parallel.
+
+        # 5) eventlet : it's a mechanism to limit the number of threads that can be used to process tasks in parallel.
+
+
+        # celery -A Projectname worker -l info --pool=gevent --concurrency=4
+        # celery -A Projectname worker -l info --pool=eventlet --concurrency=4
+        # celery -A Projectname worker -l info --pool=solo --concurrency=4
+        # celery -A Projectname worker -l info --pool=thread --concurrency=4
+        # celery -A Projectname worker -l info --pool=prefork --concurrency=4
